@@ -4,7 +4,7 @@
     "manifestVersion": "devPreview",
     "version": "1.0.0",
     "name": {
-        "short": "My Office Add-in",
+        "short": "TidsReg",
         "full": "Contoso Task Pane Add-in"
     },
     "description": {
@@ -12,7 +12,7 @@
         "full": "This is the template to get started."
     },
     "developer": {
-        "name": "Contoso",
+        "name": "Coderbois",
         "websiteUrl": "https://www.contoso.com",
         "privacyUrl": "https://www.contoso.com/privacy",
         "termsOfUseUrl": "https://www.contoso.com/servicesagreement"
@@ -30,7 +30,7 @@
         "permissions": {
             "resourceSpecific": [
                 {
-                    "name": "MailboxItem.Read.User",
+                    "name": "Calandar.Read",
                     "type": "Delegated"
                 }
             ]
@@ -105,7 +105,7 @@
                             "groups": [
                                 {
                                     "id": "msgReadGroup",
-                                    "label": "Contoso Add-in",
+                                    "label": "TimeReg",
                                     "icons": [
                                         {
                                             "size": 16,
@@ -121,34 +121,11 @@
                                         }
                                     ],
                                     "controls": [
-                                        {
-                                            "id": "msgReadOpenPaneButton",
-                                            "type": "button",
-                                            "label": "Show Taskpane",
-                                            "icons": [
-                                                {
-                                                    "size": 16,
-                                                    "file": "https://localhost:3000/assets/icon-16.png"
-                                                },
-                                                {
-                                                    "size": 32,
-                                                    "file": "https://localhost:3000/assets/icon-32.png"
-                                                },
-                                                {
-                                                    "size": 80,
-                                                    "file": "https://localhost:3000/assets/icon-80.png"
-                                                }
-                                            ],
-                                            "supertip": {
-                                                "title": "Show Taskpane",
-                                                "description": "Opens a pane displaying all available properties."
-                                            },
-                                            "actionId": "TaskPaneRuntimeShow"
-                                        },
+                                        
                                         {
                                             "id": "ActionButton",
                                             "type": "button",
-                                            "label": "Perform an action",
+                                            "label": "Say Hello World!",
                                             "icons": [
                                                 {
                                                     "size": 16,
