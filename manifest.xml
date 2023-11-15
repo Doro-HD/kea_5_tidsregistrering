@@ -47,7 +47,7 @@
             <OfficeTab id="TabDefault">
               <Group id="msgReadGroup">
                 <Label resid="GroupLabel"/>
-                <Control xsi:type="Button" id="msgReadOpenPaneButton">
+                <Control xsi:type="Button" id="msgReadOpenPaneButton"> <!-- Knap start-->
                   <Label resid="TaskpaneButton.Label"/>
                   <Supertip>
                     <Title resid="TaskpaneButton.Label"/>
@@ -61,8 +61,8 @@
                   <Action xsi:type="ShowTaskpane">
                     <SourceLocation resid="Taskpane.Url"/>
                   </Action>
-                </Control>
-                <Control xsi:type="Button" id="ActionButton">
+                </Control><!-- Knap slut-->
+                <Control xsi:type="Button" id="ActionButton"> <!-- Knap start-->
                   <Label resid="ActionButton.Label"/>
                   <Supertip>
                     <Title resid="ActionButton.Label"/>
@@ -76,7 +76,7 @@
                   <Action xsi:type="ExecuteFunction">
                     <FunctionName>action</FunctionName>
                   </Action>
-                </Control>
+                </Control> <!-- Knap slut-->
               </Group>
             </OfficeTab>
           </ExtensionPoint>
