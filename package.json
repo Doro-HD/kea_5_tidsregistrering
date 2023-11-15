@@ -1,9 +1,9 @@
 {
-  "name": "Tids registrering",
+  "name": "office-addin-taskpane-js",
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Doro-HD/kea_5_tidsregistrering"
+    "url": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS.git"
   },
   "license": "MIT",
   "config": {
@@ -17,12 +17,12 @@
     "dev-server": "webpack serve --mode development",
     "lint": "office-addin-lint check",
     "lint:fix": "office-addin-lint fix",
-    "signin": "office-addin-dev-settings m365-account login",
-    "signout": "office-addin-dev-settings m365-account logout",
     "prettier": "office-addin-lint prettier",
-    "start": "office-addin-debugging start manifest.json",
-    "stop": "office-addin-debugging stop manifest.json",
-    "validate": "office-addin-manifest validate manifest.json",
+    "start": "office-addin-debugging start manifest.xml",
+    "start:desktop": "office-addin-debugging start manifest.xml desktop",
+    "start:web": "office-addin-debugging start manifest.xml web",
+    "stop": "office-addin-debugging stop manifest.xml",
+    "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/preset-env": "^7.12.11",
     "@types/office-js": "^1.0.256",
     "@types/office-runtime": "^1.0.23",
     "acorn": "^8.5.0",
@@ -50,8 +50,6 @@
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
     "source-map-loader": "^3.0.0",
-    "ts-loader": "^9.4.1",
-    "typescript": "^4.3.5",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "4.13.1"

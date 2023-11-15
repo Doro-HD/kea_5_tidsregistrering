@@ -18,24 +18,24 @@ module.exports = async (env, options) => {
     devtool: "source-map",
     entry: {
       polyfill: ["core-js/stable", "regenerator-runtime/runtime"],
-      taskpane: ["./src/taskpane/taskpane.ts", "./src/taskpane/taskpane.html"],
-      commands: "./src/commands/commands.ts",
+      taskpane: ["./src/taskpane/taskpane.js", "./src/taskpane/taskpane.html"],
+      commands: "./src/commands/commands.js",
     },
     output: {
       clean: true,
     },
     resolve: {
-      extensions: [".ts", ".html", ".js"],
+      extensions: [".html", ".js"],
     },
     module: {
       rules: [
         {
-          test: /\.ts$/,
+          test: /\.js$/,
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-typescript"],
+              presets: ["@babel/preset-env"],
             },
           },
         },
@@ -66,7 +66,7 @@ module.exports = async (env, options) => {
             to: "assets/[name][ext][query]",
           },
           {
-            from: "manifest*.json",
+            from: "manifest*.xml",
             to: "[name]" + "[ext]",
             transform(content) {
               if (dev) {
