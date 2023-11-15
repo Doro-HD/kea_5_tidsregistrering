@@ -77,21 +77,6 @@
                     <FunctionName>action</FunctionName>
                   </Action>
                 </Control>
-                   <Control xsi:type="Button" id="ActionButton"> <!-- Knap start-->
-                  <Label resid="ActionButton.Label"/>
-                  <Supertip>
-                    <Title resid="ActionButton.Label"/>
-                    <Description resid="ActionButton.Tooltip"/>
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16"/>
-                    <bt:Image size="32" resid="Icon.32x32"/>
-                    <bt:Image size="80" resid="Icon.80x80"/>
-                  </Icon>
-                  <Action xsi:type="ExecuteFunction">
-                    <FunctionName>action</FunctionName>
-                  </Action>
-                </Control><!-- Knap slut-->
               </Group>
             </OfficeTab>
           </ExtensionPoint>
