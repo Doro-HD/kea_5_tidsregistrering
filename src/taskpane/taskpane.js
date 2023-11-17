@@ -3,7 +3,6 @@
  * See LICENSE in the project root for license information.
  */
 
-import { async } from "regenerator-runtime";
 
 /* global document, Office */
 
