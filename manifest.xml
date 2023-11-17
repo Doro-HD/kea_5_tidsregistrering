@@ -46,7 +46,7 @@
       <!-- Extension point for Appointment Organizer -->
       <DesktopFormFactor>
         <FunctionFile resid="Commands.Url" />
-        <ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface">
+        <ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface">
           <!-- Use the OfficeTab id depending on your requirements: TabDefault, TabAppointment, etc. -->
           <OfficeTab id="CalenderTab">
             <Group id="msgReadGroup">
