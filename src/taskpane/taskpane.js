@@ -3,6 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 
+
 /* global document, Office */
 
 Office.onReady((info) => {
@@ -19,4 +20,12 @@ export async function run() {
 
   // Write message property value to the task pane
   document.getElementById("item-subject").innerHTML = "<b>Subject:</b> <br/>" + item.subject;
+}
+
+export async function testFunction(event) {
+  // Get a reference to the current message
+  const item = Office.context.mailbox.item;
+
+  // Write message property value to the task pane
+  document.getElementById(item.body).innerHTML = "Hello";
 }

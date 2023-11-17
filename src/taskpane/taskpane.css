@@ -78,3 +78,15 @@
 b {
     font-weight: bold;
 }
+
+.version-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px;
+    border-bottom-left-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+  }
