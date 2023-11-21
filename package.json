@@ -20,7 +20,7 @@
     "prettier": "office-addin-lint prettier",
     "start": "office-addin-debugging start manifest.xml",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
-    "start:web": "office-addin-debugging start manifest.xml web",
+    "start:web": "office-addin-debugging start manifest.xml --app outlook --document https://outlook.office.com",
     "stop": "office-addin-debugging stop manifest.xml",
     "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --mode development --watch"
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@babel/preset-env": "^7.12.11",
-    "@types/office-js": "^1.0.256",
+    "@types/office-js": "^1.0.359",
     "@types/office-runtime": "^1.0.23",
     "acorn": "^8.5.0",
     "babel-loader": "^8.2.2",
