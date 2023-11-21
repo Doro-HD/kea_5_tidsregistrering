@@ -31,6 +31,7 @@
   <Permissions>ReadWriteItem</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
     <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit"/>
   </Rule>
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
@@ -45,7 +46,6 @@
       <!-- Extension point for Appointment Organizer -->
       <DesktopFormFactor>
         <FunctionFile resid="Commands.Url" />
-
         <ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface">
           <!-- Use the OfficeTab id depending on your requirements: TabDefault, TabAppointment, etc. -->
           <OfficeTab id="appointmentAttendeeTab">
