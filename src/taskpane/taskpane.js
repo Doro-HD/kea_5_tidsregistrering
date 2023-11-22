@@ -29,6 +29,7 @@ export async function run() {
     });
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
+       
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
 
@@ -37,7 +38,17 @@ export async function run() {
   } catch (error) {
     // Select all elements with the given class name and set their innerHTML
     console.log(error)
-    
+
+    //Troels made this switch case.
+    switch (error.message.replace(/\D/g, '')) {
+      case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
+        break;
+      case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
+        break;
+      default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
+        break;
+    }
+
     const elements = document.querySelectorAll(`.${className}`);
     elements.forEach(element => {
       element.innerHTML = error.message;
@@ -49,7 +60,7 @@ export async function run() {
 
 
   //Error function taget fra vores 3.semester.
-  async function handleHttpErrors(res) {
+/*   async function handleHttpErrors(res) {
     console.log("I httperrorfunctionen" + res.ok)
     if (!res.ok) {
       const errorResponse = await res.json();
@@ -59,7 +70,7 @@ export async function run() {
     }
     
     return res.json()
-  }
+  } */
 
 
 //DOMPurify.sanitize
