@@ -20,6 +20,7 @@ export async function run() {
   const className = 'your-error-class'; // Replace with your actual error class name
 
   try {
+<<<<<<< HEAD
     const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
       method: 'get',
       headers: {
@@ -43,9 +44,43 @@ export async function run() {
     });
   }
 }
+=======
+    await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    }).then(res => handleHttpErrors(res))
+
+    document.getElementById("returned-message-backend").innerHTML = "Sucess!!!!!!!!!!!!!";
+    console.log("Added")
+  } catch (err) {
+    document.getElementById("returned-message-backend").innerHTML = (err);//.apiError.response
+    console.error(err)
+
+  }
+
+
+  //Error function taget fra vores 3.semester.
+  async function handleHttpErrors(res) {
+    console.log("I httperrorfunctionen" + res.ok)
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      const error = new Error(errorResponse.message)
+      error.apiError = errorResponse
+      throw error
+    }
+    
+    return res.json()
+  }
+}
+
+//DOMPurify.sanitize
+
+>>>>>>> d7e30671f4bb56abdaf54ba32e439de9ea2c6f69
 
   // Get a reference to the current message
- // const item = Office.context.mailbox.item;
+  // const item = Office.context.mailbox.item;
 
   // Write message property value to the task pane
   //document.getElementById("returned-message-backend").innerHTML = "<b>Status:</b> Gemt! (Hardcoded) <br/>";
@@ -82,6 +117,7 @@ async function register() {
         console.error(err)
     
     }
+}
 
     }).then(res => handleHttpErrors(res))
 
@@ -96,6 +132,7 @@ async function register() {
 
 
 }
+<<<<<<< HEAD
 
 
 //Error function taget fra vores 3.semester.
@@ -111,3 +148,6 @@ async function register() {
     
     return res.json()
   }*/
+=======
+*/
+>>>>>>> d7e30671f4bb56abdaf54ba32e439de9ea2c6f69
