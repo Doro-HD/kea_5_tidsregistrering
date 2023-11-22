@@ -22,7 +22,7 @@ export async function run() {
   try {
 
     const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
-      method: 'get',
+      method: 'get', //Skal muligvis ændres senere
       headers: {
         'Content-Type': 'text/plain',
       },
