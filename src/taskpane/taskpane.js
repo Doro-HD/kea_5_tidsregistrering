@@ -10,7 +10,7 @@ Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = test;
+    document.getElementById("run").onclick = run;
   }
 });
 
@@ -20,17 +20,15 @@ export async function run() {
   const projectId = document.querySelector("input#project-id").value
 
   try {
-    const data = await fetch('https://timereg-api.azurewebsites.net/test', {
-        method: 'post',
+    const data = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+        method: 'post', //Denne skal jo være en post, men end pointed modtager kun get.
         headers: {
           'Content-Type': 'text/plain', // Specify the content type as plain text
         },
-        body: projectId
     }).then(res => handleHttpErrors(res))
 
     document.getElementById("returned-message-backend").innerHTML = "";
-    alert("Projekt Id added!")
-    console.log("Added")
+    console.log("Added " + projectId)
 } catch (err) {
     //document.getElementById("returned-message-backend").innerHTML = (err.apiError.response);
     console.error(err)
