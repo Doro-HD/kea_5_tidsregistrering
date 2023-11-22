@@ -53,7 +53,32 @@
           <OfficeTab id="TabDefault">
             <Group id="msgReadGroup">
               <Label resid="GroupLabel" />
-              <Control xsi:type="Button" id="msgReadOpenPaneButton">
+              <Control xsi:type="Button" id="appointmentAttendeeBtn">
+                <Label resid="TaskpaneButton.Label" />
+                <Supertip>
+                  <Title resid="TaskpaneButton.Label" />
+                  <Description resid="TaskpaneButton.Tooltip" />
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16" />
+                  <bt:Image size="32" resid="Icon.32x32" />
+                  <bt:Image size="80" resid="Icon.80x80" />
+                </Icon>
+                <Action xsi:type="ShowTaskpane">
+                  <SourceLocation resid="Taskpane.Url" />
+                </Action>
+              </Control>
+              <!-- ... other controls if needed ... -->
+            </Group>
+          </OfficeTab>
+        </ExtensionPoint>
+
+        <ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface">
+          <!-- Use the OfficeTab id depending on your requirements: TabDefault, TabAppointment, etc. -->
+          <OfficeTab id="AppointmentOrganizerCommandSurfaceTab">
+            <Group id="appointmentOrganizerGroup">
+              <Label resid="GroupLabel" />
+              <Control xsi:type="Button" id="appointmentOrganizerBtn">
                 <Label resid="TaskpaneButton.Label" />
                 <Supertip>
                   <Title resid="TaskpaneButton.Label" />
