@@ -17,11 +17,11 @@ Office.onReady((info) => {
 });
 
 async function test() {
-  const res = await fetch("http://localhost:5040/Test")
+  const res = await fetch("https://timereg-api.azurewebsites.net/hello")
   const data = await res.json()
 
   const node = document.querySelector("#item-subject")
-  node.textContent = data.testName
+  node.textContent = data.value
 }
 
 export async function run() {
