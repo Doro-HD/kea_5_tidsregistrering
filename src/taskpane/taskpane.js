@@ -14,12 +14,37 @@ Office.onReady((info) => {
   }
 });
 
+//14:54. 22/11/2023. Meget af nedenstående er taget fra Chatgbt
 export async function run() {
-
-
-  const projectId = document.querySelector("input#project-id").value
+  const projectId = document.querySelector("input#project-id").value;
+  const className = 'your-error-class'; // Replace with your actual error class name
 
   try {
+<<<<<<< HEAD
+    const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
+
+    if (!response.ok) { // If response status code is an error (4xx or 5xx)
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    document.getElementById("returned-message-backend").innerHTML = "Success!!!!!!!!!!!!!";
+    return response.json(); // or .text() if the response is not JSON
+  } catch (error) {
+    // Select all elements with the given class name and set their innerHTML
+    console.log(error)
+    
+    const elements = document.querySelectorAll(`.${className}`);
+    elements.forEach(element => {
+      element.innerHTML = error.message;
+    });
+  }
+}
+=======
     await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
       method: 'get',
       headers: {
@@ -52,6 +77,7 @@ export async function run() {
 
 //DOMPurify.sanitize
 
+>>>>>>> d7e30671f4bb56abdaf54ba32e439de9ea2c6f69
 
   // Get a reference to the current message
   // const item = Office.context.mailbox.item;
@@ -93,7 +119,16 @@ async function register() {
     }
 }
 
+    }).then(res => handleHttpErrors(res))
 
+    document.getElementById("returned-message-backend").innerHTML = "Sucess!!!!!!!!!!!!!";
+    console.log("Added")
+} catch (err) {
+    console.log("This is the error number:" + err.message)
+    document.getElementById("returned-message-backend").innerHTML = (err);//.apiError.response
+    console.error(err)
+//DOMPurify.sanitize
+}
 
 
 }
