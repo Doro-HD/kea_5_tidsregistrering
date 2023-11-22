@@ -10,21 +10,22 @@ Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
+    document.getElementById("run").onclick = test;
   }
 });
 
 export async function run() { //Denne metode skal tage det der kommer fra input feltet (I think)
   // Get a reference to the current message
- // const item = Office.context.mailbox.item;
+  // const item = Office.context.mailbox.item;
 
   // Write message property value to the task pane
   document.getElementById("returned-message-backend").innerHTML = "<b>Status:</b> Gemt! (Hardcoded) <br/>";
 
 
 
-/*
-Export function taget fra vores 3.semester.
+}
+
+//Export function taget fra vores 3.semester.
 async function register() {
 
     const usernameInput = document.querySelector("input#username").value
@@ -52,14 +53,14 @@ async function register() {
         console.error(err)
     
     }
+}
 
-*/
-
-
+export async function test() {
 
 
 
 }
+
 
 export async function testFunction(event) {
   // Get a reference to the current message
