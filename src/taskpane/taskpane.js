@@ -14,7 +14,7 @@ Office.onReady((info) => {
   }
 });
 
-export async function run() {
+export async function run() { //Denne metode skal tage det der kommer fra input feltet (I think)
   // Get a reference to the current message
   const item = Office.context.mailbox.item;
 
