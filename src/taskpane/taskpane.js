@@ -17,15 +17,14 @@ Office.onReady((info) => {
 //14:54. 22/11/2023. Meget af nedenstående er taget fra Chatgbt
 export async function run() {
   const projectId = document.querySelector("input#project-id").value;
-  const className = 'your-error-class'; // Replace with your actual error class name
 
   try {
 
     const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
-      method: 'get', //Skal muligvis ændres senere
+/*       method: 'get', //Skal muligvis ændres senere
       headers: {
         'Content-Type': 'text/plain',
-      },
+      }, */
     });
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
@@ -48,16 +47,8 @@ export async function run() {
       default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
         break;
     }
-
-    const elements = document.querySelectorAll(`.${className}`);
-    elements.forEach(element => {
-      element.innerHTML = error.message;
-    });
   }
 }
-
-    
-
 
   //Error function taget fra vores 3.semester.
 /*   async function handleHttpErrors(res) {
