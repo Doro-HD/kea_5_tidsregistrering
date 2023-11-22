@@ -20,17 +20,17 @@ export async function run() {
   const projectId = document.querySelector("input#project-id").value
 
   try {
-    const data = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
-        method: 'post', //Denne skal jo være en post, men end pointed modtager kun get.
+    await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+        method: 'get',
         headers: {
-          'Content-Type': 'text/plain', // Specify the content type as plain text
-        },
+          'Content-Type': 'text/plain',
+        }
     }).then(res => handleHttpErrors(res))
 
-    document.getElementById("returned-message-backend").innerHTML = "";
-    console.log("Added " + projectId)
+    document.getElementById("returned-message-backend").innerHTML = "Sucess!!!!!!!!!!!!!";
+    console.log("Added")
 } catch (err) {
-    //document.getElementById("returned-message-backend").innerHTML = (err.apiError.response);
+    document.getElementById("returned-message-backend").innerHTML = (err);//.apiError.response
     console.error(err)
 
 }
@@ -85,7 +85,7 @@ async function register() {
 
 //Error function taget fra vores 3.semester.
     async function handleHttpErrors(res) {
-      console.log("I httperrorfunctionen" + res)
+      console.log("I httperrorfunctionen" + res.ok)
     if (!res.ok) {
       const errorResponse = await res.json();
       const error = new Error(errorResponse.message)
