@@ -21,19 +21,35 @@ export async function run() {
 
   try {
     await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'text/plain',
-        }
+      method: 'get',
+      headers: {
+        'Content-Type': 'text/plain',
+      }
     }).then(res => handleHttpErrors(res))
 
     document.getElementById("returned-message-backend").innerHTML = "Sucess!!!!!!!!!!!!!";
     console.log("Added")
-} catch (err) {
+  } catch (err) {
     document.getElementById("returned-message-backend").innerHTML = (err);//.apiError.response
     console.error(err)
 
+  }
+
+
+  //Error function taget fra vores 3.semester.
+  async function handleHttpErrors(res) {
+    console.log("I httperrorfunctionen" + res.ok)
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      const error = new Error(errorResponse.message)
+      error.apiError = errorResponse
+      throw error
+    }
+    
+    return res.json()
+  }
 }
+
 //DOMPurify.sanitize
 
 
@@ -43,7 +59,7 @@ export async function run() {
   // Write message property value to the task pane
   //document.getElementById("returned-message-backend").innerHTML = "<b>Status:</b> Gemt! (Hardcoded) <br/>";
 
-}
+
 /*
 
 //Export function taget fra vores 3.semester.
@@ -82,16 +98,3 @@ async function register() {
 
 }
 */
-
-//Error function taget fra vores 3.semester.
-    async function handleHttpErrors(res) {
-      console.log("I httperrorfunctionen" + res.ok)
-    if (!res.ok) {
-      const errorResponse = await res.json();
-      const error = new Error(errorResponse.message)
-      error.apiError = errorResponse
-      throw error
-    }
-    
-    return res.json()
-  }
