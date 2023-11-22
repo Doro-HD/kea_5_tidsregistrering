@@ -21,7 +21,7 @@ export async function run() {
   try {
 
     const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
-/*       method: 'get', //Skal muligvis ændres senere
+      /* method: 'get', // Usually how the fetch call should look like
       headers: {
         'Content-Type': 'text/plain',
       }, */
