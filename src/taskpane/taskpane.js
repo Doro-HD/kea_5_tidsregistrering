@@ -59,3 +59,13 @@ export async function run() { //Run fucntion to send the project ID to the backe
     }
   }
 }
+
+function getStartTime() {
+  Office.context.mailbox.item.start.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+    console.log(`Appointment starts: ${result.value}`);
+  });
+}
