@@ -3,11 +3,14 @@
  * See LICENSE in the project root for license information.
  */
 
+import { async } from "regenerator-runtime";
+
 
 /* global document, Office */
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
+    getTime();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
@@ -31,9 +34,12 @@ export async function run() { //Run fucntion to send the project ID to the backe
   const projectId = document.querySelector("input#project-id").value;
 
   try {
-
+        
     const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
     });
+
+    //Tilføj de populated felter (startDate, endDate, startTime, endTime)
+    //til et fetch kald, så de kan sendes med til backenden, sammen med projekt ID'et.
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
        
@@ -58,4 +64,34 @@ export async function run() { //Run fucntion to send the project ID to the backe
         break;
     }
   }
+
+
+
+}
+
+//This function gets the start and end time of the appointment.
+//Made by Troels.
+export async function getTime() {
+
+  Office.context.mailbox.item.start.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment starts: ${result.value}`);
+    document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+  });
+
+  Office.context.mailbox.item.end.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment ends: ${result.value}`);
+    document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+  });
 }
