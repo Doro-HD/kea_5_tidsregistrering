@@ -24,7 +24,8 @@ async function test() {
   node.innerHTML = data.value
 }
 
-//14:54. 22/11/2023. Meget af nedenstående er taget fra Chatgbt
+//14:54. 22/11/2023. En del af nedenstående er taget fra Chatgbt.
+//Victor har dog redigeret store dele af denne funktion så den passer til det vi skal bruge den til.
 export async function run() {
   const projectId = document.querySelector("input#project-id").value;
 
