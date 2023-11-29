@@ -12,8 +12,33 @@ Office.onReady((info) => {
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
     document.getElementById("call").onclick = test;
+    document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
+    //let itemId = Office.context.mailbox.item.itemId;
+
+    // You can now use this itemId for your purposes
+    //console.log("Event ID: " + itemId);
   }
 });
+
+//Made by Chatgbt
+function getCalendarEventIdAfterSave() {
+  Office.context.mailbox.item.saveAsync(function (result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+          let itemId = Office.context.mailbox.item.itemId;
+          if (itemId) {
+              console.log("Calendar Event ID: " + itemId);
+              // Further processing with eventId
+          } else {
+              console.error("Event ID not available even after save.");
+              // Handle the case where itemId is not available
+          }
+      } else {
+          console.error("Error during save: ", result.error);
+      }
+  });
+}
+
+
 
 //David made this.
 //Test function to see if the frontend can communicate with the backend.
