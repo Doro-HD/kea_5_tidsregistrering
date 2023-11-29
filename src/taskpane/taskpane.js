@@ -11,11 +11,11 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-
     document.getElementById("call").onclick = test;
   }
 });
 
+//David made this.
 //Test function to see if the frontend can communicate with the backend.
 async function test() {
   const res = await fetch("https://timereg-api.azurewebsites.net/hello")
@@ -25,10 +25,9 @@ async function test() {
   node.innerHTML = data.value
 }
 
-//14:54. 22/11/2023. En del af nedenstående er taget fra Chatgbt.
-//Victor har dog redigeret store dele af denne funktion så den passer til det vi skal bruge den til.
-//Run fucntion to send the project ID to the backend. And show a respond feedback to user.
-export async function run() {
+//14:54. 22/11/2023. A large portion of this function has been taken from Chatgbt.
+//Victor has edited large sections of this function so it fits our needs.
+export async function run() { //Run fucntion to send the project ID to the backend. And show a respond feedback to user.
   const projectId = document.querySelector("input#project-id").value;
 
   try {

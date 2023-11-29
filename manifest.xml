@@ -41,6 +41,7 @@
       </bt:Sets>
     </Requirements>
     <Hosts>
+    <!-- ... OBS! Chatgbt has helped the group (Lasse, Victor, Troels and David) generate this Host section. ... -->
     <Host xsi:type="MailHost">
       <!-- ... existing <DesktopFormFactor> elements ... -->
       <!-- Extension point for Appointment Organizer -->
