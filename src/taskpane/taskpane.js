@@ -20,7 +20,7 @@ async function test() {
   const res = await fetch("https://timereg-api.azurewebsites.net/hello")
   const data = await res.json()
 
-  const node = document.querySelector("returned-message-backend")
+  const node = document.getElementById("returned-message-backend")
   node.innerHTML = data.value
 }
 
