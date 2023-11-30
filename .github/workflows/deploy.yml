@@ -33,13 +33,16 @@ jobs:
           --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" 
           --destination add-in 
           --source .\upload 
+          --overwrite 
           --pattern="*"
 
       - name: Deploy manifest to exchange
         #install required modules
+        
+        #Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
+        #Import-Module ExchangeOnlineManagement
         run: |
-          Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
-          Import-Module ExchangeOnlineManagement
+          
 
           $authority = "https://login.microsoftonline.com/$env:APP_TENANT_ID"
           $scopes = "https://outlook.office365.com/.default"
