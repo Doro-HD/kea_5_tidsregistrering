@@ -1,0 +1,57 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Deploy manifest to exchange and upload files to azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:    
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: checkout
+        - uses: actions/checkout@v4
+
+      - name: setup azure for powershell
+        #authenticate and create context
+        - run: |
+          $storageAccountName="coderbois"
+          $containerName="add-in"
+          $storageAccountKey=${{ AZ_STORAGE_ACCOUNT_KEY }}
+
+          mkdir upload
+          cp manifest.xml .\upload
+          cp assets .\upload
+          cp src .\upload
+
+          az storage blob upload-batch --account-name $storageAccountName --account-key $storageAccountKey --destination $containerName --source .\upload\*
+
+      - name: setup exchange for powershell
+        #install required modules
+        - run: |
+          Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
+          Import-Module ExchangeOnlineManagement
+        #setup variables
+        - run: |
+          $clientId = ${{ APP_CLIENT_ID }}
+          $tenantId = ${{ APP_TENANT_ID }}
+          $authority = "https://login.microsoftonline.com/$tenantId"
+          $scopes = "https://outlook.office365.com/.default"
+        #connect to exchange
+        - run: |
+          $msalClient = New-Object Microsoft.Identity.Client.PublicClientApplication -ArgumentList $clientId, $authority
+          $token = $msalClient.AcquireTokenInteractive($scopes).ExecuteAsync().Result
+          
+          Connect-ExchangeOnline -AccessToken $token.AccessToken
+      
+
+
+        
+
+
+  
