@@ -11,9 +11,9 @@ jobs:
   deploy:
     runs-on: windows-latest
     env:
-      AZ_STORAGE_ACCOUNT_KEY: ${{ AZ_STORAGE_ACCOUNT_KEY }}
-      APP_CLIENT_ID: ${{ APP_CLIENT_ID }}
-      APP_TENANT_ID: ${{ APP_TENANT_ID }}
+      AZ_STORAGE_ACCOUNT_KEY: ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_TENANT_ID: ${{ secrets.APP_TENANT_ID }}
 
     steps:
       - uses: actions/checkout@v4
