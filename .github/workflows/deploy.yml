@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - US31/backend_Service_Demo
+      - US31/Backend_Service_Demo
   workflow_dispatch:
 
 jobs:
