@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup azure for powershell
+      - name: upload files to azure
         #authenticate and create context
         run: |
           $storageAccountName="coderbois"
@@ -29,9 +29,14 @@ jobs:
           cp assets .\upload
           cp src .\upload
 
-          az storage blob upload-batch --account-name $storageAccountName --account-key $env:AZ_STORAGE_ACCOUNT_KEY --destination $containerName --source .\upload\*
+          az storage blob upload-batch \
+            --account-name $storageAccountName \
+            --account-key $env:AZ_STORAGE_ACCOUNT_KEY \
+            --destination $containerName \
+            --source .\upload \
+            --pattern="*"
 
-      - name: setup exchange for powershell
+      - name: Deploy manifest to exchange
         #install required modules
         run: |
           Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
