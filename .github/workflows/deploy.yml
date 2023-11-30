@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - US31/backend_Service_Demo
   workflow_dispatch:
 
 jobs:    
@@ -14,8 +15,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: checkout
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: setup azure for powershell
         #authenticate and create context
