@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - US31/backend_Service_Demo
+  workflow_dispatch:
 
 jobs:
   deploy:
