@@ -21,9 +21,6 @@ jobs:
       - name: setup for upload
         #authenticate and create context
         run: |
-          $storageAccountName="coderbois"
-          $containerName="add-in"
-
           mkdir upload
           cp manifest.xml .\upload
           cp assets .\upload
@@ -32,9 +29,9 @@ jobs:
       - name: upload files
         run: >
           az storage blob upload-batch 
-          --account-name "$storageAccountName" 
+          --account-name coderbois 
           --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" 
-          --destination "$containerName" 
+          --destination add-in 
           --source .\upload 
           --pattern="*"
 
