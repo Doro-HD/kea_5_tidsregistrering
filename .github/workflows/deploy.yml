@@ -29,7 +29,7 @@ jobs:
           cp assets .\upload
           cp src .\upload
 
-          az storage blob upload-batch --account-name $storageAccountName --account-key $AZ_STORAGE_ACCOUNT_KEY --destination $containerName --source .\upload\*
+          az storage blob upload-batch --account-name $storageAccountName --account-key $env:AZ_STORAGE_ACCOUNT_KEY --destination $containerName --source .\upload\*
 
       - name: setup exchange for powershell
         #install required modules
@@ -37,10 +37,10 @@ jobs:
           Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
           Import-Module ExchangeOnlineManagement
 
-          $authority = "https://login.microsoftonline.com/$APP_TENANT_ID"
+          $authority = "https://login.microsoftonline.com/$env:APP_TENANT_ID"
           $scopes = "https://outlook.office365.com/.default"
 
-          $msalClient = New-Object Microsoft.Identity.Client.PublicClientApplication -ArgumentList $APP_CLIENT_ID, $authority
+          $msalClient = New-Object Microsoft.Identity.Client.PublicClientApplication -ArgumentList $env:APP_CLIENT_ID, $authority
           $token = $msalClient.AcquireTokenInteractive($scopes).ExecuteAsync().Result
           
           Connect-ExchangeOnline -AccessToken $token.AccessToken
