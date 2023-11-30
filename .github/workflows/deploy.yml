@@ -32,11 +32,11 @@ jobs:
       - name: upload files
         run: >
           az storage blob upload-batch 
-            --account-name $storageAccountName 
-            --account-key $env:AZ_STORAGE_ACCOUNT_KEY 
-            --destination $containerName 
-            --source .\upload 
-            --pattern="*"
+          --account-name $storageAccountName 
+          --account-key $env:AZ_STORAGE_ACCOUNT_KEY 
+          --destination $containerName 
+          --source .\upload 
+          --pattern="*"
 
       - name: Deploy manifest to exchange
         #install required modules
