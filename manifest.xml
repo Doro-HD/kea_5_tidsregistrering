@@ -41,6 +41,7 @@
       </bt:Sets>
     </Requirements>
     <Hosts>
+    <!-- ... OBS! Chatgbt has helped the group (Lasse, Victor, Troels and David) generate this Host section. ... -->
     <Host xsi:type="MailHost">
       <!-- ... existing <DesktopFormFactor> elements ... -->
       <!-- Extension point for Appointment Organizer -->
@@ -112,7 +113,7 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Time It"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Vis opgave ruden"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Registrè tid"/>
         <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
       </bt:ShortStrings>
       <bt:LongStrings>

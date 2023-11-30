@@ -20,9 +20,10 @@
     <link href="taskpane.css" rel="stylesheet" type="text/css" />
 </head>
 
+ <!-- Victor, Troels and David has made changes to this section, so that it showes up correctly in the taskpane. -->
 <body class="ms-font-m ms-welcome ms-Fabric">
     <header class="ms-welcome__header">
-        <img width="90" height="90" src="../../assets/logo.png" alt="Time It" title="Time It" />
+        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Time It" title="Time It" />
         <h1 class="ms-font-su">Velkommen</h1>
     </header>
     <section id="sideload-msg" class="ms-welcome__main">
@@ -30,15 +31,30 @@
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
         <h2 class="ms-font-xl">Registrér din tid her! </h2>
-        <p><label id="item-subject"></label></p>
+        <p><label id="returned-message-backend"></label></p>
+        <div class="ms-TextField">
+            <label class="ms-Label">Start Dato:</label> <label id="startDate"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Slut Dato:</label> <label id="endDate"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Start tid:</label> <label id="startTime"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Slut tid:</label> <label id="endTime"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Projekt ID</label>
+            <input id="project-id" class="ms-TextField-field" type="" maxlength="10" placeholder="Projekt ID"/>
+        </div>
         <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Run</span>
+            <span class="ms-Button-label">Gem</span>
         </div>
         <div role="button" id="call" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">Call</span>
         </div>
         <div class="version-number">v1.0.0</div>
-
     </main>
 </body>
 
