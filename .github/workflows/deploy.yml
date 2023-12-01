@@ -52,7 +52,7 @@ jobs:
           $secPassword = ConvertTo-SecureString $clientSecret -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($clientId, $secPassword)
 
-          Connect-ExchangeOnline -ClientId $clientId -TenantId $tenantId -Credential $credential
+          Connect-ExchangeOnline -Credential $credential
 
       
 
