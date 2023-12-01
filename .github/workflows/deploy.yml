@@ -42,6 +42,7 @@ jobs:
         #Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
         #Import-Module ExchangeOnlineManagement
         run: |
+          Install-Module -Name ExchangeOnlineManagement -Force -AllowClobber
           Import-Module ExchangeOnlineManagement
           
           $clientId = $env:APP_CLIENT_ID
