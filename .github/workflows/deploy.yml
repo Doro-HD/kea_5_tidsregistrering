@@ -13,6 +13,7 @@ jobs:
     env:
       AZ_STORAGE_ACCOUNT_KEY: ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
       APP_TENANT_ID: ${{ secrets.APP_TENANT_ID }}
 
     steps:
@@ -40,13 +41,15 @@ jobs:
         #Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
         #Import-Module ExchangeOnlineManagement
         run: |
-          $authority = "https://login.microsoftonline.com/$env:APP_TENANT_ID"
-          $scopes = "https://outlook.office365.com/.default"
+          $clientId = $env:APP_CLIENT_ID
+          $clientSecret = $env:APP_CLIENT_SECRET
+          $tenantId = $env:APP_TENANT_ID
 
-          $msalClient = New-Object Microsoft.Identity.Client.PublicClientApplication -ArgumentList $env:APP_CLIENT_ID, $authority
-          $token = $msalClient.AcquireTokenInteractive($scopes).ExecuteAsync().Result
-          
-          Connect-ExchangeOnline -AccessToken $token.AccessToken
+          $secPassword = ConvertTo-SecureString $clientSecret -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential ($clientId, $secPassword)
+
+          Connect-ExchangeOnline -ClientId $clientId -TenantId $tenantId -Credential $credential
+
       
 
 
