@@ -20,16 +20,19 @@ jobs:
 
       - name: upload files
         run: |
-          $files = @("manifest.xml", "src/commands", "src/taskpane", "assets")
-          foreach ($file in $files) {
-            az storage blob upload-batch `
-            --account-name coderbois `
-            --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
-            --destination add-in `
-            --source $file `
-            --overwrite `
-            --pattern="*"
-          }
+          mkdir upload
+          mv manifest.xml upload
+          mv src\commands\* upload
+          mv src\taskpane\* upload
+          mv assets\* upload
+
+          az storage blob upload-batch `
+          --account-name coderbois `
+          --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
+          --destination add-in `
+          --source upload `
+          --overwrite `
+          --pattern="*"
 
       - name: Deploy manifest to exchange
         #install required modules
