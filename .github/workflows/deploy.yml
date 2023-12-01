@@ -18,32 +18,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup for upload
-        #authenticate and create context
-        run: |
-          mkdir upload
-          cp manifest.xml .\upload
-          cp assets .\upload
-          cp src .\upload
-
       - name: upload files
-        run: >
-          az storage blob upload-batch 
-          --account-name coderbois 
-          --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" 
-          --destination add-in 
-          --source .\upload 
-          --overwrite 
-          --pattern="*"
+        run: |
+          $files = @("\.manifest.xml", "\.src/commands", "\.src/taskpane", "\.assets")
+          foreach ($file in $files) {
+            az storage blob upload-batch `
+            --account-name coderbois `
+            --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
+            --destination add-in `
+            --source $file `
+            --overwrite `
+            --pattern="*"
+          }
 
       - name: Deploy manifest to exchange
         #install required modules
-        
+
         #Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
         #Import-Module ExchangeOnlineManagement
         run: |
-          
-
           $authority = "https://login.microsoftonline.com/$env:APP_TENANT_ID"
           $scopes = "https://outlook.office365.com/.default"
 
