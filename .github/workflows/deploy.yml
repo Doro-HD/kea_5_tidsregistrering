@@ -46,7 +46,7 @@ jobs:
           Install-Module -Name ExchangeOnlineManagement -Force -AllowClobber
           Import-Module ExchangeOnlineManagement
           
-          Connect-ExchangeOnline -CertificateThumbprint $env:THUMBPRINT
+          Connect-ExchangeOnline -CertificateThumbprint $env:THUMBPRINT -Organisation hlpf.onmicrosoft.com
 
       
 
