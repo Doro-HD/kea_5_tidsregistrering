@@ -3,7 +3,6 @@
  * See LICENSE in the project root for license information.
  */
 
-
 /* global document, Office */
 
 Office.onReady((info) => {
@@ -13,23 +12,23 @@ Office.onReady((info) => {
     document.getElementById("run").onclick = run;
     document.getElementById("call").onclick = test;
     document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
-    //let itemId = Office.context.mailbox.item.itemId;
-
-    // You can now use this itemId for your purposes
-    //console.log("Event ID: " + itemId);
   }
 });
 
-//Made by Chatgbt
+// Function to get the Calendar Event ID after saving the event
+//Made by Chatgbt.
 function getCalendarEventIdAfterSave() {
   Office.context.mailbox.item.saveAsync(function (result) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
-          let itemId = Office.context.mailbox.item.itemId;
-          if (itemId) {
-              console.log("Calendar Event ID: " + itemId);
+          const item = Office.context.mailbox.item;
+          //const myvarbasedvar = item.getItemIdAsync()
+          //console.log(myvarbasedvar)
+          console.log(item)
+          if (item) {
+              console.log("Calendar Event ID: " + item);
               // Further processing with eventId
           } else {
-              console.error("Event ID not available even after save.");
+              console.error("Event ID not available even after save." + item);
               // Handle the case where itemId is not available
           }
       } else {
@@ -37,6 +36,8 @@ function getCalendarEventIdAfterSave() {
       }
   });
 }
+
+// ... Rest of your existing code for 'test' and 'run' functions ...
 
 
 
