@@ -20,9 +20,8 @@ jobs:
 
       - name: upload files
         run: |
-          $files = @("\.manifest.xml", "\.src/commands", "\.src/taskpane", "\.assets")
+          $files = @("manifest.xml", "src/commands", "src/taskpane", "assets")
           foreach ($file in $files) {
-            echo $file
             az storage blob upload-batch `
             --account-name coderbois `
             --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
