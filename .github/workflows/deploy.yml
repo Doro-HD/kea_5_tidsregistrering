@@ -51,7 +51,7 @@ jobs:
           [System.IO.File]::WriteAllBytes("certificate.cer", $certificateBytes)
           
           Connect-ExchangeOnline `
-          -CertificatePath \.certificate.cer `
+          -CertificateFilePath .\certificate.cer `
           -Organization hlpf.onmicrosoft.com `
           -AppId $env:APP_CLIENT_ID
 
