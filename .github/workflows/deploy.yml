@@ -47,8 +47,8 @@ jobs:
           Import-Module ExchangeOnlineManagement
 
           $certificateBase64 = $env:CERTIFICATE
-          $bytes = [System.Convert]::FromBase64String($certificateBase64)
-          Set-Content -Path "certificate.cer" -Value $bytes -Encoding Byte
+          $certificateBytes = [System.Convert]::FromBase64String($certificateBase64)
+          [System.IO.File]::WriteAllBytes("certificate.cer", $certificateBytes)
           
           Connect-ExchangeOnline `
           -CertificatePath \.certificate.cer `
