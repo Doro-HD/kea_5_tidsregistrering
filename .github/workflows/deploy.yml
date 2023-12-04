@@ -49,6 +49,8 @@ jobs:
           $certificateBase64 = $env:CERTIFICATE
           $certificateBytes = [System.Convert]::FromBase64String($certificateBase64)
           [System.IO.File]::WriteAllBytes("certificate.cer", $certificateBytes)
+
+          $certificatePath = Join-Path -Path $PWD -ChildPath certificate.cer
           
           Connect-ExchangeOnline `
           -CertificateFilePath .\certificate.cer `
