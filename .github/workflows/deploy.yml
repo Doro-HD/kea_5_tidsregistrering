@@ -45,9 +45,13 @@ jobs:
         run: |
           Install-Module -Name ExchangeOnlineManagement -Force -AllowClobber
           Import-Module ExchangeOnlineManagement
+
+          $certificateBase64 = $env:CERTIFICATE
+          $bytes = [System.Convert]::FromBase64String($certificateBase64)
+          Set-Content -Path "certificate.cer" -Value $bytes -Encoding Byte
           
           Connect-ExchangeOnline `
-          -CertificateThumbprint $env:THUMBPRINT `
+          -CertificatePath \.certificate.cer `
           -Organization hlpf.onmicrosoft.com `
           -AppId $env:APP_CLIENT_ID
 
