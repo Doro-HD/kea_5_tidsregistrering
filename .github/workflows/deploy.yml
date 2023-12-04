@@ -53,7 +53,7 @@ jobs:
           $certificatePath = Join-Path -Path $PWD -ChildPath certificate.cer
           
           Connect-ExchangeOnline `
-          -CertificateFilePath .\certificate.cer `
+          -CertificateFilePath $certificatePath `
           -Organization hlpf.onmicrosoft.com `
           -AppId $env:APP_CLIENT_ID
 
