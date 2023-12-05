@@ -29,7 +29,7 @@ jobs:
           mv assets\* upload
 
           az storage blob upload-batch `
-          --account-name coderbois `
+          --account-name timeit `
           --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
           --destination add-in `
           --source upload `
