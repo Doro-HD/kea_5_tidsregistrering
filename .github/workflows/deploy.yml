@@ -1,54 +1,32 @@
-name: Deploy manifest to exchange and upload files to azure
+name: Upload files to azure
 
 on:
   push:
     branches:
       - main
-      - US31/backend_Service_Demo
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: windows-latest
+    env:
+      AZ_STORAGE_ACCOUNT_KEY: ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup azure for powershell
-        #authenticate and create context
+      - name: upload files
         run: |
-          $storageAccountName="coderbois"
-          $containerName="add-in"
-          $storageAccountKey=${{ AZ_STORAGE_ACCOUNT_KEY }}
-
           mkdir upload
-          cp manifest.xml .\upload
-          cp assets .\upload
-          cp src .\upload
+          mv manifest.xml upload
+          mv src\commands\* upload
+          mv src\taskpane\* upload
+          mv assets\* upload
 
-          az storage blob upload-batch --account-name $storageAccountName --account-key $storageAccountKey --destination $containerName --source .\upload\*
-
-      - name: setup exchange for powershell
-        #install required modules
-        run: |
-          Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
-          Import-Module ExchangeOnlineManagement
-        #setup variables
-        run: |
-          $clientId = ${{ APP_CLIENT_ID }}
-          $tenantId = ${{ APP_TENANT_ID }}
-          $authority = "https://login.microsoftonline.com/$tenantId"
-          $scopes = "https://outlook.office365.com/.default"
-        #connect to exchange
-        run: |
-          $msalClient = New-Object Microsoft.Identity.Client.PublicClientApplication -ArgumentList $clientId, $authority
-          $token = $msalClient.AcquireTokenInteractive($scopes).ExecuteAsync().Result
-          
-          Connect-ExchangeOnline -AccessToken $token.AccessToken
-      
-
-
-        
-
-
-  
+          az storage blob upload-batch `
+          --account-name timeit `
+          --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
+          --destination add-in `
+          --source upload `
+          --overwrite `
+          --pattern="*"
