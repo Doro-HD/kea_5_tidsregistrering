@@ -18,9 +18,11 @@ Office.onReady((info) => {
 // Function to get the Calendar Event ID after saving the event
 //Made by Chatgbt.
 function getCalendarEventIdAfterSave() {
+  console.log(Office.context.mailbox.item.itemId)
+  /*
   Office.context.mailbox.item.saveAsync(function (result) {
+    console.log(result.value)
       if (result.status === Office.AsyncResultStatus.Succeeded) {
-        console.log(JSON.stringify(result.value))
         const item = Office.context.mailbox.item;
         const myvarbasedvar = item.getItemIdAsync()
         console.log(myvarbasedvar)
@@ -36,6 +38,7 @@ function getCalendarEventIdAfterSave() {
           //console.error("Error during save: ", result.error);
       }
   });
+  */
 }
 
 // ... Rest of your existing code for 'test' and 'run' functions ...
