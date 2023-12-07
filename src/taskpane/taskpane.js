@@ -20,19 +20,20 @@ Office.onReady((info) => {
 function getCalendarEventIdAfterSave() {
   Office.context.mailbox.item.saveAsync(function (result) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
-          const item = Office.context.mailbox.item;
-          //const myvarbasedvar = item.getItemIdAsync()
-          //console.log(myvarbasedvar)
-          console.log(item)
-          if (item) {
-              console.log("Calendar Event ID: " + item);
-              // Further processing with eventId
-          } else {
-              console.error("Event ID not available even after save." + item);
-              // Handle the case where itemId is not available
-          }
+        console.log(JSON.stringify(result.value))
+        const item = Office.context.mailbox.item;
+        const myvarbasedvar = item.getItemIdAsync()
+        console.log(myvarbasedvar)
+        console.log(item)
+        if (item) {
+            console.log("Calendar Event ID: " + item);
+            // Further processing with eventId
+        } else {
+            console.error("Event ID not available even after save." + item);
+            // Handle the case where itemId is not available
+        }
       } else {
-          console.error("Error during save: ", result.error);
+          //console.error("Error during save: ", result.error);
       }
   });
 }
