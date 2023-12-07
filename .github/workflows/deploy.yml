@@ -1,10 +1,9 @@
-name: Deploy manifest to exchange and upload files to azure
+name: Upload files to azure
 
 on:
   push:
     branches:
       - main
-      - US31/Backend_Service_Demo
   workflow_dispatch:
 
 jobs:
@@ -12,10 +11,6 @@ jobs:
     runs-on: windows-latest
     env:
       AZ_STORAGE_ACCOUNT_KEY: ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
-      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
-      #APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
-      #APP_TENANT_ID: ${{ secrets.APP_TENANT_ID }}
-      THUMBPRINT: ${{ secrets.APP_THUMBPRINT }}
 
     steps:
       - uses: actions/checkout@v4
@@ -35,36 +30,3 @@ jobs:
           --source upload `
           --overwrite `
           --pattern="*"
-
-      - name: Deploy manifest to exchange
-        if: false
-        #install required modules
-
-        #Install-Module -Name Microsoft.Authentication.Identity.Client -Force -Scope CurrentUser
-        #Import-Module ExchangeOnlineManagement
-        run: |
-          Install-Module -Name ExchangeOnlineManagement -Force -AllowClobber
-          Import-Module ExchangeOnlineManagement
-
-          $encodedPfx = $env:CERTIFICATE
-          $pfxBytes = [Convert]::FromBase64String($encodedPfx)
-          $pfxPath = Join-Path $env:TEMP "certificate.pfx"
-          [System.IO.File]::WriteAllBytes($pfxPath, $pfxBytes)
-
-          $pwd = ConvertTo-SecureString -String "YourPfxPassword" -Force -AsPlainText
-          Import-PfxCertificate -FilePath $pfxPath -CertStoreLocation Cert:\LocalMachine\My -Password $pwd
-
-          $certificatePath = Join-Path -Path $PWD -ChildPath certificate.cer
-          
-          Connect-ExchangeOnline `
-          -CertificateFilePath $certificatePath `
-          -Organization hlpf.onmicrosoft.com `
-          -AppId $env:APP_CLIENT_ID
-
-      
-
-
-        
-
-
-  
