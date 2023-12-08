@@ -1,5 +1,4 @@
 <!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
-<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
 
 <!DOCTYPE html>
 <html>
@@ -12,6 +11,7 @@
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+	<script type="module" src="taskpane.js"></script>
 
     <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
     <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"/>
@@ -33,12 +33,16 @@
         <h2 class="ms-font-xl">Registrér din tid her! </h2>
         <p><label id="returned-message-backend"></label></p>
         <div class="ms-TextField">
-            <label class="ms-Label">Start tid</label>
-            <input id="startTime" class="ms-TextField-field" type="datetime-local"/>
+            <label class="ms-Label">Start Dato:</label> <label id="startDate"></label>
         </div>
         <div class="ms-TextField">
-            <label class="ms-Label">Slut tid</label>
-            <input id="endTime" class="ms-TextField-field" type="datetime-local"/>
+            <label class="ms-Label">Slut Dato:</label> <label id="endDate"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Start tid:</label> <label id="startTime"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Slut tid:</label> <label id="endTime"></label>
         </div>
         <div class="ms-TextField">
             <label class="ms-Label">Projekt ID</label>

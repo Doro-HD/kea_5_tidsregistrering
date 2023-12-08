@@ -2,7 +2,6 @@
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-
 /* global document, Office */
 
 const baseURL = "https://timereg-api.azurewebsites.net"
@@ -10,6 +9,7 @@ const baseURL = "https://timereg-api.azurewebsites.net"
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
+    getTime();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
@@ -71,7 +71,11 @@ export async function run() { //Run fucntion to send the project ID to the backe
   try {
 
     const response = await fetch(baseURL + '/test/' + projectId, {
+
     });
+
+    //Tilføj de populated felter (startDate, endDate, startTime, endTime)
+    //til et fetch kald, så de kan sendes med til backenden, sammen med projekt ID'et.
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
 
@@ -101,4 +105,34 @@ function errorHandler(error) {
     default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
       break;
   }
+
+
+
+}
+
+//This function gets the start and end time of the appointment.
+//Made by Troels.
+export async function getTime() {
+
+  Office.context.mailbox.item.start.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment starts: ${result.value}`);
+    document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+  });
+
+  Office.context.mailbox.item.end.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment ends: ${result.value}`);
+    document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+  });
 }

@@ -1,0 +1,32 @@
+name: Upload files to azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    env:
+      AZ_STORAGE_ACCOUNT_KEY: ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: upload files
+        run: |
+          mkdir upload
+          mv manifest.xml upload
+          mv src\commands\* upload
+          mv src\taskpane\* upload
+          mv assets\* upload
+
+          az storage blob upload-batch `
+          --account-name timeit `
+          --account-key "$env:AZ_STORAGE_ACCOUNT_KEY" `
+          --destination add-in `
+          --source upload `
+          --overwrite `
+          --pattern="*"
