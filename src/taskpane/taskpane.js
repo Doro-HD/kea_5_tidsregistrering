@@ -15,44 +15,54 @@ Office.onReady((info) => {
 });
 
 // Function to get the Calendar Event ID.
-//Made by Victor and Troels.
-function getCalendarEventId() {
-if(Office.context.mailbox.item.itemId != undefined){
-  return Office.context.mailbox.item.itemId
-  
-}else{
-  var myPlaceHolder;
-  Office.context.mailbox.item.saveAsync(function (result) {
-    myPlaceHolder = result.value;
-  });
-  return myPlaceHolder;
+//Made by Victor, Troels and David.
+async function getCalendarEventId() {
+  if (Office.context.mailbox.item.itemId != undefined) {
+    return Office.context.mailbox.item.itemId
+
+  } else {
+    var myPlaceHolder;
+    Office.context.mailbox.item.getItemIdAsync(function (result) {
+      myPlaceHolder = result.value;
+    });
+    return myPlaceHolder;
+  }
 }
+//Made by Victor, Troels and David.
+async function getCalendarEventIdtest() {
+  const myBasedVar = await myTestFunction();
+  console.log(myBasedVar)
+}
+//Made by Victor, Troels and David.
+function myTestFunction() {
+  return new Promise((resolve, reject) => {
+    Office.context.mailbox.item.getItemIdAsync(result => {
+      resolve(result.value)
+    })
+  })
+
 }
 
-function getCalendarEventIdtest() {
-  console.log(getCalendarEventId())
-}
-
-  /*
-  Office.context.mailbox.item.saveAsync(function (result) {
-    console.log(result.value)
-      if (result.status === Office.AsyncResultStatus.Succeeded) {
-        const item = Office.context.mailbox.item;
-        const myvarbasedvar = item.getItemIdAsync()
-        console.log(myvarbasedvar)
-        console.log(item)
-        if (item) {
-            console.log("Calendar Event ID: " + item);
-            // Further processing with eventId
-        } else {
-            console.error("Event ID not available even after save." + item);
-            // Handle the case where itemId is not available
-        }
+/*
+Office.context.mailbox.item.saveAsync(function (result) {
+  console.log(result.value)
+    if (result.status === Office.AsyncResultStatus.Succeeded) {
+      const item = Office.context.mailbox.item;
+      const myvarbasedvar = item.getItemIdAsync()
+      console.log(myvarbasedvar)
+      console.log(item)
+      if (item) {
+          console.log("Calendar Event ID: " + item);
+          // Further processing with eventId
       } else {
-          //console.error("Error during save: ", result.error);
+          console.error("Event ID not available even after save." + item);
+          // Handle the case where itemId is not available
       }
-  });
-  */
+    } else {
+        //console.error("Error during save: ", result.error);
+    }
+});
+*/
 
 
 // ... Rest of your existing code for 'test' and 'run' functions ...
@@ -71,14 +81,14 @@ export async function run() { //Run fucntion to send the project ID to the backe
     });
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
-       
+
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
 
     document.getElementById("returned-message-backend").innerHTML = "Success!!!!!!!!!!!!!";
     return response.json(); // or .text() if the response is not JSON
   } catch (error) {
-    
+
     // Select all elements with the given class name and set their innerHTML
     console.log(error)
 
