@@ -10,15 +10,29 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-    document.getElementById("call").onclick = test;
-    document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
+    document.getElementById("testeventid").onclick = getCalendarEventIdtest;
   }
 });
 
-// Function to get the Calendar Event ID after saving the event
-//Made by Chatgbt.
-function getCalendarEventIdAfterSave() {
-  console.log(Office.context.mailbox.item.itemId)
+// Function to get the Calendar Event ID.
+//Made by Victor and Troels.
+function getCalendarEventId() {
+if(Office.context.mailbox.item.itemId != undefined){
+  return Office.context.mailbox.item.itemId
+  
+}else{
+  var myPlaceHolder;
+  Office.context.mailbox.item.saveAsync(function (result) {
+    myPlaceHolder = result.value;
+  });
+  return myPlaceHolder;
+}
+}
+
+function getCalendarEventIdtest() {
+  console.log(getCalendarEventId())
+}
+
   /*
   Office.context.mailbox.item.saveAsync(function (result) {
     console.log(result.value)
@@ -39,21 +53,12 @@ function getCalendarEventIdAfterSave() {
       }
   });
   */
-}
+
 
 // ... Rest of your existing code for 'test' and 'run' functions ...
 
 
 
-//David made this.
-//Test function to see if the frontend can communicate with the backend.
-async function test() {
-  const res = await fetch("https://timereg-api.azurewebsites.net/hello")
-  const data = await res.json()
-
-  const node = document.getElementById("returned-message-backend")
-  node.innerHTML = data.value
-}
 
 //14:54. 22/11/2023. A large portion of this function has been taken from Chatgbt.
 //Victor has edited large sections of this function so it fits our needs.
