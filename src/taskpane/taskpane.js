@@ -5,35 +5,54 @@
 
 /* global document, Office */
 
+const baseURL = "https://timereg-api.azurewebsites.net"
+
+
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-    document.getElementById("call").onclick = test;
     document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
   }
 });
 
-// Function to get the Calendar Event ID.
-//Made by Victor, Troels and David.
-async function getCalendarEventId() {
-  if (Office.context.mailbox.item.itemId != undefined) {
-    return Office.context.mailbox.item.itemId
 
-  } else {
-    var myPlaceHolder;
-    Office.context.mailbox.item.getItemIdAsync(function (result) {
-      myPlaceHolder = result.value;
-    });
-    return myPlaceHolder;
-  }
-}
+
 //Made by Victor, Troels and David.
-async function getCalendarEventIdtest() {
-  const myBasedVar = await myTestFunction();
-  console.log(myBasedVar)
+async function getCalendarEventIdAfterSave() {
+  const eventIdString = await myTestFunction();
+
+  let headers = new Headers()
+  headers.append("Content-Type", "application/json; charset=utf-8")
+  headers.append("Accept", "application/json")
+
+  const jsonBody = JSON.stringify({ eventid: eventIdString })
+
+  try {
+    const data = await fetch(baseURL + "/appointment", {
+      method: 'post',
+      headers: headers,
+      body: jsonBody
+    })
+
+    if (!data.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`)
+    }
+
+    document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
+    console.log("Registreret")
+
+  } catch (error) {
+
+    console.error(error)
+
+    errorHandler(error);
+  }
+
+  console.log(eventIdString)
 }
+
 //Made by Victor, Troels and David.
 function myTestFunction() {
   return new Promise((resolve, reject) => {
@@ -41,44 +60,8 @@ function myTestFunction() {
       resolve(result.value)
     })
   })
-
 }
 
-/*
-Office.context.mailbox.item.saveAsync(function (result) {
-  console.log(result.value)
-    if (result.status === Office.AsyncResultStatus.Succeeded) {
-      const item = Office.context.mailbox.item;
-      const myvarbasedvar = item.getItemIdAsync()
-      console.log(myvarbasedvar)
-      console.log(item)
-      if (item) {
-          console.log("Calendar Event ID: " + item);
-          // Further processing with eventId
-      } else {
-          console.error("Event ID not available even after save." + item);
-          // Handle the case where itemId is not available
-      }
-    } else {
-        //console.error("Error during save: ", result.error);
-    }
-});
-*/
-
-
-// ... Rest of your existing code for 'test' and 'run' functions ...
-
-
-
-//David made this.
-//Test function to see if the frontend can communicate with the backend.
-async function test() {
-  const res = await fetch("https://timereg-api.azurewebsites.net/hello")
-  const data = await res.json()
-
-  const node = document.getElementById("returned-message-backend")
-  node.innerHTML = data.value
-}
 
 //14:54. 22/11/2023. A large portion of this function has been taken from Chatgbt.
 //Victor has edited large sections of this function so it fits our needs.
@@ -87,7 +70,7 @@ export async function run() { //Run fucntion to send the project ID to the backe
 
   try {
 
-    const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+    const response = await fetch(baseURL + '/test/' + projectId, {
     });
 
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
@@ -104,13 +87,18 @@ export async function run() { //Run fucntion to send the project ID to the backe
 
     //Troels made this switch case.
     //This switch case can be expanded to handle more errors.
-    switch (error.message.replace(/\D/g, '')) {
-      case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
-        break;
-      case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
-        break;
-      default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
-        break;
-    }
+    errorHandler(error);
+  }
+}
+
+
+function errorHandler(error) {
+  switch (error.message.replace(/\D/g, '')) {
+    case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
+      break;
+    case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
+      break;
+    default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
+      break;
   }
 }
