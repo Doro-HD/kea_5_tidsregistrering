@@ -9,9 +9,7 @@ const baseURL = "https://timereg-api.azurewebsites.net"
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
-    getTime();
-    getSubjectLine();
-    getEmailAddress();
+    getInfo();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
@@ -29,10 +27,10 @@ async function getCalendarEventIdAfterSave() {
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  const jsonBody = JSON.stringify({ eventid: eventIdString })
+  const jsonBody = JSON.stringify({ name: "TestStringBody" })
 
   try {
-    const data = await fetch(baseURL + "/appointment", {
+    const data = await fetch(baseURL + "/appointment/" + eventIdString, {
       method: 'post',
       headers: headers,
       body: jsonBody
@@ -109,15 +107,14 @@ function errorHandler(error) {
     default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
       break;
   }
-
-
-
 }
 
-//This function gets the start and end time of the appointment.
-//Made by Troels.
-export async function getTime() {
 
+//Made by Troels.
+async function getInfo() {
+
+  //Henter start og slut tidspunk på mødet
+  //========================================================================================
   Office.context.mailbox.item.start.getAsync((result) => {
     if (result.status !== Office.AsyncResultStatus.Succeeded) {
       console.error(`Action failed with message ${result.error.message}`);
@@ -139,10 +136,12 @@ export async function getTime() {
     document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
     document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
   });
-}
+  //========================================================================================
 
-async function getSubjectLine() {
-  Office.context.mailbox.item.subject.getAsync((result) => { 
+
+  //Henter titlen på mødet
+  //========================================================================================
+  Office.context.mailbox.item.subject.getAsync((result) => {
     if (result.status !== Office.AsyncResultStatus.Succeeded) {
       console.error(`Action failed with message ${result.error.message}`);
       return;
@@ -150,10 +149,11 @@ async function getSubjectLine() {
     console.log(`Appointment subject: ${result.value}`);
     document.getElementById("subjectLine").innerHTML = result.value;
   });
-}
+  //========================================================================================
 
-async function getEmailAddress() {
-  Office.context.mailbox.item.organizer.getAsync((result) => { 
+  //Henter mødelederens email
+  //========================================================================================
+  Office.context.mailbox.item.organizer.getAsync((result) => {
     if (result.status !== Office.AsyncResultStatus.Succeeded) {
       console.error(`Action failed with message ${result.error.message}`);
       return;
@@ -161,6 +161,5 @@ async function getEmailAddress() {
     console.log(`Appointment organizer: ${result.value}`);
     document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
   });
-
-
+  //========================================================================================
 }
