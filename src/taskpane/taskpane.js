@@ -18,7 +18,12 @@ Office.onReady((info) => {
 // Function to get the Calendar Event ID after saving the event
 //Made by Chatgbt.
 function getCalendarEventIdAfterSave() {
+  Office
+  console.log(Office.context.mailbox.userProfile.emailAddress)
   console.log(Office.context.mailbox.item.itemId)
+  Office.context.mailbox.item.getItemIdAsync(result => {
+    console.log(result)
+  })
   /*
   Office.context.mailbox.item.saveAsync(function (result) {
     console.log(result.value)
