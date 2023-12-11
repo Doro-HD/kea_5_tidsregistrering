@@ -10,6 +10,8 @@ const baseURL = "https://timereg-api.azurewebsites.net"
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     getTime();
+    getSubjectLine();
+    getEmailAddress();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
@@ -95,7 +97,9 @@ export async function run() { //Run fucntion to send the project ID to the backe
   }
 }
 
-
+//Made by Troels.
+//En lille metode, der tager en fejl, og viser en besked til brugeren.
+//Smed den over i sin egen metode, så den kan genbruges. frem for at skrive den samme kode flere gange.
 function errorHandler(error) {
   switch (error.message.replace(/\D/g, '')) {
     case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
@@ -135,4 +139,28 @@ export async function getTime() {
     document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
     document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
   });
+}
+
+async function getSubjectLine() {
+  Office.context.mailbox.item.subject.getAsync((result) => { 
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+    console.log(`Appointment subject: ${result.value}`);
+    document.getElementById("subjectLine").innerHTML = result.value;
+  });
+}
+
+async function getEmailAddress() {
+  Office.context.mailbox.item.organizer.getAsync((result) => { 
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+    console.log(`Appointment organizer: ${result.value}`);
+    document.getElementById("emailAddress").innerHTML = result.value;
+  });
+
+
 }
