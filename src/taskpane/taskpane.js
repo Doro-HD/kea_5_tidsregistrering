@@ -159,7 +159,7 @@ async function getEmailAddress() {
       return;
     }
     console.log(`Appointment organizer: ${result.value}`);
-    document.getElementById("emailAddress").innerHTML = result.value;
+    document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
   });
 
 
