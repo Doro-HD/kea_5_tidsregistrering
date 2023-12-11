@@ -138,7 +138,7 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Time It"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Registrè tid"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Registrer tid"/>
         <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
       </bt:ShortStrings>
       <bt:LongStrings>

@@ -13,7 +13,7 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-    document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
+    document.getElementById("the-event-id").onclick = getCalendarEventIdAfterSave;
   }
 });
 
@@ -21,7 +21,7 @@ Office.onReady((info) => {
 
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
-  const eventIdString = await myTestFunction();
+  const eventIdString = await getEventId();
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
@@ -54,7 +54,7 @@ async function getCalendarEventIdAfterSave() {
 }
 
 //Made by Victor, Troels and David.
-function myTestFunction() {
+function getEventId() {
   return new Promise((resolve, reject) => {
     Office.context.mailbox.item.getItemIdAsync(result => {
       resolve(result.value)
