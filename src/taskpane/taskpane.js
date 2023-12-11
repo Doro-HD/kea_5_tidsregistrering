@@ -4,7 +4,7 @@
  */
 /* global document, Office */
 
-const localUrl = "http://localhost:5040"
+
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -32,7 +32,7 @@ async function getCalendarEventIdAfterSave() {
   })
 
   try {
-    const data = await fetch(localUrl + "/appointment", {
+    const data = await fetch(baseURL + "/appointment", {
       method: 'post',
       headers: headers,
       body: jsonBody
