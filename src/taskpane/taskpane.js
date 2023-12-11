@@ -20,7 +20,13 @@ Office.onReady((info) => {
 
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
-  const eventIdString = await getEventId();
+  let eventIdString;
+  if(Office.context.mailbox.item.itemId == undefined){
+    eventIdString = await getEventId();
+  } else{
+    eventIdString = Office.context.mailbox.item.itemId;
+  }
+  
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
@@ -115,9 +121,11 @@ function errorHandler(error) {
 //Made by Troels.
 async function getInfo() {
 
-  //Henter start og slut tidspunk på mødet
+  if(Office.context.mailbox.item.itemId == undefined){
+    
+    //Henter start og slut tidspunk på mødet
   //========================================================================================
-  Office.context.mailbox.item.start.getAsync((result) => {
+  Office.context.mailbox.item.((result) => {
     if (result.status !== Office.AsyncResultStatus.Succeeded) {
       console.error(`Action failed with message ${result.error.message}`);
       return;
@@ -164,4 +172,11 @@ async function getInfo() {
     document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
   });
   //========================================================================================
-}
+} else{
+
+
+  "Troels skriv herunde din cringe boi"
+    
+  }
+
+} 
