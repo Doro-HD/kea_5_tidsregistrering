@@ -2,63 +2,68 @@
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-
 /* global document, Office */
+
+const localUrl = "http://localhost:5040"
+const baseURL = "https://timereg-api.azurewebsites.net"
+
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
+    getInfo();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-    document.getElementById("call").onclick = test;
     document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
   }
 });
 
-// Function to get the Calendar Event ID after saving the event
-//Made by Chatgbt.
-function getCalendarEventIdAfterSave() {
-  Office
-  console.log(Office.context.mailbox.userProfile.emailAddress)
-  console.log(Office.context.mailbox.item.itemId)
-  Office.context.mailbox.item.getItemIdAsync(result => {
-    console.log(result)
+//Made by Victor, Troels and David.
+async function getCalendarEventIdAfterSave() {
+  const eventIdString = await myTestFunction();
+
+  let headers = new Headers()
+  headers.append("Content-Type", "application/json; charset=utf-8")
+  headers.append("Accept", "application/json")
+
+  const jsonBody = JSON.stringify({
+    id: eventIdString,
+    name: "TestStringBody"
   })
-  /*
-  Office.context.mailbox.item.saveAsync(function (result) {
-    console.log(result.value)
-      if (result.status === Office.AsyncResultStatus.Succeeded) {
-        const item = Office.context.mailbox.item;
-        const myvarbasedvar = item.getItemIdAsync()
-        console.log(myvarbasedvar)
-        console.log(item)
-        if (item) {
-            console.log("Calendar Event ID: " + item);
-            // Further processing with eventId
-        } else {
-            console.error("Event ID not available even after save." + item);
-            // Handle the case where itemId is not available
-        }
-      } else {
-          //console.error("Error during save: ", result.error);
-      }
-  });
-  */
+
+  try {
+    const data = await fetch(localUrl + "/appointment", {
+      method: 'post',
+      headers: headers,
+      body: jsonBody
+    })
+
+    if (!data.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`)
+    }
+
+    document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
+    console.log("Registreret")
+
+  } catch (error) {
+
+    console.error(error)
+
+    errorHandler(error);
+  }
+
+  console.log(eventIdString)
 }
 
-// ... Rest of your existing code for 'test' and 'run' functions ...
-
-
-
-//David made this.
-//Test function to see if the frontend can communicate with the backend.
-async function test() {
-  const res = await fetch("https://timereg-api.azurewebsites.net/hello")
-  const data = await res.json()
-
-  const node = document.getElementById("returned-message-backend")
-  node.innerHTML = data.value
+//Made by Victor, Troels and David.
+function myTestFunction() {
+  return new Promise((resolve, reject) => {
+    Office.context.mailbox.item.getItemIdAsync(result => {
+      resolve(result.value)
+    })
+  })
 }
+
 
 //14:54. 22/11/2023. A large portion of this function has been taken from Chatgbt.
 //Victor has edited large sections of this function so it fits our needs.
@@ -67,30 +72,96 @@ export async function run() { //Run fucntion to send the project ID to the backe
 
   try {
 
-    const response = await fetch('https://timereg-api.azurewebsites.net/test/' + projectId, {
+    const response = await fetch(baseURL + '/test/' + projectId, {
+
     });
 
+    //Tilføj de populated felter (startDate, endDate, startTime, endTime)
+    //til et fetch kald, så de kan sendes med til backenden, sammen med projekt ID'et.
+
     if (!response.ok) { // If response status code is an error (4xx or 5xx)
-       
+
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
 
     document.getElementById("returned-message-backend").innerHTML = "Success!!!!!!!!!!!!!";
     return response.json(); // or .text() if the response is not JSON
   } catch (error) {
-    
+
     // Select all elements with the given class name and set their innerHTML
     console.log(error)
 
     //Troels made this switch case.
     //This switch case can be expanded to handle more errors.
-    switch (error.message.replace(/\D/g, '')) {
-      case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
-        break;
-      case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
-        break;
-      default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
-        break;
-    }
+    errorHandler(error);
   }
+}
+
+//Made by Troels.
+//En lille metode, der tager en fejl, og viser en besked til brugeren.
+//Smed den over i sin egen metode, så den kan genbruges. frem for at skrive den samme kode flere gange.
+function errorHandler(error) {
+  switch (error.message.replace(/\D/g, '')) {
+    case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
+      break;
+    case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
+      break;
+    default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
+      break;
+  }
+}
+
+
+//Made by Troels.
+async function getInfo() {
+
+  //Henter start og slut tidspunk på mødet
+  //========================================================================================
+  Office.context.mailbox.item.start.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment starts: ${result.value}`);
+    document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+  });
+
+  Office.context.mailbox.item.end.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+
+    console.log(`Appointment ends: ${result.value}`);
+    document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+  });
+  //========================================================================================
+
+
+  //Henter titlen på mødet
+  //========================================================================================
+  Office.context.mailbox.item.subject.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+    console.log(`Appointment subject: ${result.value}`);
+    document.getElementById("subjectLine").innerHTML = result.value;
+  });
+  //========================================================================================
+
+  //Henter mødelederens email
+  //========================================================================================
+  Office.context.mailbox.item.organizer.getAsync((result) => {
+    if (result.status !== Office.AsyncResultStatus.Succeeded) {
+      console.error(`Action failed with message ${result.error.message}`);
+      return;
+    }
+    console.log(`Appointment organizer: ${result.value}`);
+    document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+  });
+  //========================================================================================
 }
