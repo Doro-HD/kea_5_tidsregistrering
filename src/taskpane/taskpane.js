@@ -21,12 +21,12 @@ Office.onReady((info) => {
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
   let eventIdString;
-  if(Office.context.mailbox.item.itemId == undefined){
+  if (Office.context.mailbox.item.itemId == undefined) {
     eventIdString = await getEventId();
-  } else{
+  } else {
     eventIdString = Office.context.mailbox.item.itemId;
   }
-  
+
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
@@ -121,62 +121,67 @@ function errorHandler(error) {
 //Made by Troels.
 async function getInfo() {
 
-  if(Office.context.mailbox.item.itemId == undefined){
-    
+  if (Office.context.mailbox.item.itemId == undefined) {
+
     //Henter start og slut tidspunk på mødet
-  //========================================================================================
-  Office.context.mailbox.item.((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
+    //========================================================================================
+    Office.context.mailbox.item.start.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
 
-    console.log(`Appointment starts: ${result.value}`);
-    document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
-    document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
-  });
+      console.log(`Appointment starts: ${result.value}`);
+      document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+    });
 
-  Office.context.mailbox.item.end.getAsync((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
+    Office.context.mailbox.item.end.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
 
-    console.log(`Appointment ends: ${result.value}`);
-    document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
-    document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
-  });
-  //========================================================================================
-
-
-  //Henter titlen på mødet
-  //========================================================================================
-  Office.context.mailbox.item.subject.getAsync((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
-    console.log(`Appointment subject: ${result.value}`);
-    document.getElementById("subjectLine").innerHTML = result.value;
-  });
-  //========================================================================================
-
-  //Henter mødelederens email
-  //========================================================================================
-  Office.context.mailbox.item.organizer.getAsync((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
-    console.log(`Appointment organizer: ${result.value}`);
-    document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
-  });
-  //========================================================================================
-} else{
+      console.log(`Appointment ends: ${result.value}`);
+      document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+    });
+    //========================================================================================
 
 
-  "Troels skriv herunde din cringe boi"
-    
+    //Henter titlen på mødet
+    //========================================================================================
+    Office.context.mailbox.item.subject.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
+      console.log(`Appointment subject: ${result.value}`);
+      document.getElementById("subjectLine").innerHTML = result.value;
+    });
+    //========================================================================================
+
+    //Henter mødelederens email
+    //========================================================================================
+    Office.context.mailbox.item.organizer.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
+      console.log(`Appointment organizer: ${result.value}`);
+      document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+    });
+    //========================================================================================
+  } else {
+
+    //Sætter felterne til at være de samme som mødet, hvis det er et møde man er inviteret til.
+    document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
+    document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
+
   }
 
 } 
