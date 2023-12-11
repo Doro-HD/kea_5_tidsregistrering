@@ -4,6 +4,7 @@
  */
 /* global document, Office */
 
+const localUrl = "http://localhost:5040"
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -17,8 +18,6 @@ Office.onReady((info) => {
   }
 });
 
-
-
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
   const eventIdString = await getEventId();
@@ -27,10 +26,13 @@ async function getCalendarEventIdAfterSave() {
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  const jsonBody = JSON.stringify({ name: "TestStringBody" })
+  const jsonBody = JSON.stringify({
+    id: eventIdString,
+    name: "TestStringBody"
+  })
 
   try {
-    const data = await fetch(baseURL + "/appointment/" + eventIdString, {
+    const data = await fetch(localUrl + "/appointment", {
       method: 'post',
       headers: headers,
       body: jsonBody
