@@ -4,30 +4,38 @@
  */
 /* global document, Office */
 
+
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
-    getTime();
+    getInfo();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("run").onclick = run;
-    document.getElementById("testeventid").onclick = getCalendarEventIdAfterSave;
+    document.getElementById("the-event-id").onclick = getCalendarEventIdAfterSave;
   }
 });
 
-
-
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
-  const eventIdString = await myTestFunction();
+  let eventIdString;
+  if (Office.context.mailbox.item.itemId == undefined) {
+    eventIdString = await getEventId();
+  } else {
+    eventIdString = Office.context.mailbox.item.itemId;
+  }
+
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  const jsonBody = JSON.stringify({ eventid: eventIdString })
+  const jsonBody = JSON.stringify({
+    id: eventIdString,
+    name: "TestStringBody"
+  })
 
   try {
     const data = await fetch(baseURL + "/appointment", {
@@ -54,7 +62,7 @@ async function getCalendarEventIdAfterSave() {
 }
 
 //Made by Victor, Troels and David.
-function myTestFunction() {
+function getEventId() {
   return new Promise((resolve, reject) => {
     Office.context.mailbox.item.getItemIdAsync(result => {
       resolve(result.value)
@@ -95,7 +103,9 @@ export async function run() { //Run fucntion to send the project ID to the backe
   }
 }
 
-
+//Made by Troels.
+//En lille metode, der tager en fejl, og viser en besked til brugeren.
+//Smed den over i sin egen metode, så den kan genbruges. frem for at skrive den samme kode flere gange.
 function errorHandler(error) {
   switch (error.message.replace(/\D/g, '')) {
     case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
@@ -105,34 +115,73 @@ function errorHandler(error) {
     default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
       break;
   }
-
-
-
 }
 
-//This function gets the start and end time of the appointment.
+
 //Made by Troels.
-export async function getTime() {
+async function getInfo() {
 
-  Office.context.mailbox.item.start.getAsync((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
+  if (Office.context.mailbox.item.itemId == undefined) {
 
-    console.log(`Appointment starts: ${result.value}`);
-    document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
-    document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
-  });
+    //Henter start og slut tidspunk på mødet
+    //========================================================================================
+    Office.context.mailbox.item.start.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
 
-  Office.context.mailbox.item.end.getAsync((result) => {
-    if (result.status !== Office.AsyncResultStatus.Succeeded) {
-      console.error(`Action failed with message ${result.error.message}`);
-      return;
-    }
+      console.log(`Appointment starts: ${result.value}`);
+      document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+    });
 
-    console.log(`Appointment ends: ${result.value}`);
-    document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
-    document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
-  });
-}
+    Office.context.mailbox.item.end.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
+
+      console.log(`Appointment ends: ${result.value}`);
+      document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+    });
+    //========================================================================================
+
+
+    //Henter titlen på mødet
+    //========================================================================================
+    Office.context.mailbox.item.subject.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
+      console.log(`Appointment subject: ${result.value}`);
+      document.getElementById("subjectLine").innerHTML = result.value;
+    });
+    //========================================================================================
+
+    //Henter mødelederens email
+    //========================================================================================
+    Office.context.mailbox.item.organizer.getAsync((result) => {
+      if (result.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error(`Action failed with message ${result.error.message}`);
+        return;
+      }
+      console.log(`Appointment organizer: ${result.value}`);
+      document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+    });
+    //========================================================================================
+  } else {
+
+    //Sætter felterne til at være de samme som mødet, hvis det er et møde man er inviteret til.
+    document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
+    document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
+
+  }
+
+} 

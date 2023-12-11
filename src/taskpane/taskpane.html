@@ -30,8 +30,14 @@
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <h2 class="ms-font-xl">Registrér din tid her! </h2>
+        <h2 class="ms-font-xl">Registrer din tid her! </h2>
         <p><label id="returned-message-backend"></label></p>
+        <div class="ms-TextField">
+            <label class="ms-Label">Titel: </label> <label id="subjectLine"></label>
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">Email: </label> <label id="emailAddress"></label>
+        </div>
         <div class="ms-TextField">
             <label class="ms-Label">Start Dato:</label> <label id="startDate"></label>
         </div>
@@ -49,11 +55,11 @@
             <input id="project-id" class="ms-TextField-field" type="" maxlength="10" placeholder="Projekt ID"/>
         </div>
         <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Gem</span>
+            <span class="ms-Button-label">Gem Test</span>
         </div>
         <div class="version-number">v1.0.0</div>
 
-        <div role="button" id="testeventid" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+        <div role="button" id="the-event-id" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">ID</span>
         </div>
     </main>

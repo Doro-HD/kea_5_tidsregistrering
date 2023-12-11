@@ -6,8 +6,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Time It"/>
   <Description DefaultValue="A template to get started."/>
-  <IconUrl DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/icon-128.png"/>
+  <IconUrl DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/TimeItLogo-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/TimeItLogo-128.png"/>
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
   <AppDomains>
     <AppDomain>https://www.contoso.com</AppDomain>
@@ -128,17 +128,17 @@
   </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://timeit.blob.core.windows.net/add-in/assets/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/TimeItLogo-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/TimeItLogo-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/TimeItLogo-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://timeit.blob.core.windows.net/add-in/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://timeit.blob.core.windows.net/add-in/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Time It"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Registrè tid"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Registrer tid"/>
         <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
       </bt:ShortStrings>
       <bt:LongStrings>
