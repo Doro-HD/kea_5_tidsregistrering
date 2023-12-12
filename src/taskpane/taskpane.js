@@ -22,10 +22,9 @@ async function sendJsonDataToBackend() {
 
   const values = getInfo();
 
-  //===============================VICTOR KIG HER===================================================
   const projectid = document.querySelector("input#project-id").value;
   values[4] = projectid;
-  //================================================================================================
+
 
   console.log(values);
 
@@ -41,27 +40,15 @@ async function sendJsonDataToBackend() {
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-/*   const jsonBody = JSON.stringify({
-    id: eventIdString, //Aktivitets ID
-    //Felterne skal ændres til hvad de hedder i databasen.
-    name: values[4], //Subjectline/Navn på møde
-    startTime: values[0], //Start tidspunkt
-    endTime: values[2], //Slut tidspunkt
-    startDate: values[1], //Start dato
-    endDate: values[3], //Slut dato
-    email: values[5], //Email på bruger
-    projectId: values[6] //Projekt ID
-
-  }) */
 
   const jsonBody = JSON.stringify({
     Id: eventIdString, //Aktivitets ID
     //Felterne skal ændres til hvad de hedder i databasen.
     Subject: values[2], //Subjectline/Navn på møde
+    UserEmail: values[3], //Email på bruger
+    ProjectId: values[4], //Projekt ID
     AppointmentStart: values[0], //Møde start
     AppointmentEnd: values[1], //Møde slut
-    UserEmail: values[3], //Email på bruger
-    ProjectId: values[4] //Projekt ID
 
   })
 
