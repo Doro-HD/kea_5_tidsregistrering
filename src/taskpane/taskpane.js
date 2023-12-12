@@ -41,6 +41,8 @@ async function sendJsonDataToBackend() {
   headers.append("Accept", "application/json")
 
 
+
+
   const jsonBody = JSON.stringify({
     Id: eventIdString, //Aktivitets ID
     //Felterne skal ændres til hvad de hedder i databasen.
