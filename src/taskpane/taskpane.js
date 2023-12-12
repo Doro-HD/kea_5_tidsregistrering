@@ -28,6 +28,8 @@ async function getCalendarEventIdAfterSave() {
   values[6] = projectid;
   //================================================================================================
 
+  console.log(values);
+
   let eventIdString;
   if (Office.context.mailbox.item.itemId == undefined) {
     eventIdString = await getEventId();
@@ -50,8 +52,10 @@ async function getCalendarEventIdAfterSave() {
     endDate: values[3], //Slut dato
     email: values[5], //Email på bruger
     projectId: values[6] //Projekt ID
-    
+
   })
+
+  console.log(jsonBody)
 
   try {
     const data = await fetch(baseURL + "/appointment", {
@@ -134,7 +138,7 @@ function errorHandler(error) {
 
 
 //Made by Troels.
-async function getInfo() {
+function getInfo() {
 
   const values = [];
 
