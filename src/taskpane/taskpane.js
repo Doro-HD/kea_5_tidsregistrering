@@ -4,7 +4,7 @@
  */
 /* global document, Office */
 
-
+let ifEventIsPresent;
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -14,8 +14,44 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("the-event-id").onclick = sendJsonDataToBackend;
+    getEventFromBackend();
   }
 });
+
+
+async function getEventFromBackend(){
+
+  let headers = new Headers()
+  headers.append("Content-Type", "application/json; charset=utf-8")
+  headers.append("Accept", "application/json")
+
+  const jsonBody = JSON.stringify({
+    Id: eventIdString, //Aktivitets ID
+
+  })
+
+  try {
+    const data = await fetch(baseURL + "/appointment", {
+      method: 'get',
+      headers: headers,
+      body: jsonBody
+    })
+
+    if (!data.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`)
+    }
+
+    //Unpack json object here
+    document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
+
+  } catch (error) {
+    console.error(error)
+    errorHandler(error);
+  }
+
+}
+
+
 
 //Made by Victor, Troels and David.
 async function sendJsonDataToBackend() {
