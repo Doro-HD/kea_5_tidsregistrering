@@ -25,7 +25,7 @@ async function getCalendarEventIdAfterSave() {
 
   //===============================VICTOR KIG HER===================================================
   const projectid = document.querySelector("input#project-id").value;
-  values[6] = projectid;
+  values[4] = projectid;
   //================================================================================================
 
   console.log(values);
@@ -42,7 +42,7 @@ async function getCalendarEventIdAfterSave() {
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  const jsonBody = JSON.stringify({
+/*   const jsonBody = JSON.stringify({
     id: eventIdString, //Aktivitets ID
     //Felterne skal ændres til hvad de hedder i databasen.
     name: values[4], //Subjectline/Navn på møde
@@ -52,6 +52,17 @@ async function getCalendarEventIdAfterSave() {
     endDate: values[3], //Slut dato
     email: values[5], //Email på bruger
     projectId: values[6] //Projekt ID
+
+  }) */
+
+  const jsonBody = JSON.stringify({
+    Id: eventIdString, //Aktivitets ID
+    //Felterne skal ændres til hvad de hedder i databasen.
+    Subject: values[2], //Subjectline/Navn på møde
+    AppointmentStart: values[0], //Møde start
+    AppointmentEnd: values[1], //Møde slut
+    UserEmail: values[3], //Email på bruger
+    ProjectId: values[4] //Projekt ID
 
   })
 
@@ -152,9 +163,10 @@ function getInfo() {
         return;
       }
 
+      values[0] = result.value;
       console.log(`Appointment starts: ${result.value}`);
-      values[0] = document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      values[1] = document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+      /* values[0] =  */document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      /* values[1] =  */document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
     });
 
     Office.context.mailbox.item.end.getAsync((result) => {
@@ -163,9 +175,10 @@ function getInfo() {
         return;
       }
 
+      values[1] = result.value;
       console.log(`Appointment ends: ${result.value}`);
-      values[2] = document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      values[3] = document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+      /* values[2] =  */document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      /* values[3] =  */document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
     });
     //========================================================================================
 
@@ -178,7 +191,7 @@ function getInfo() {
         return;
       }
       console.log(`Appointment subject: ${result.value}`);
-      values[4] = document.getElementById("subjectLine").innerHTML = result.value;
+      values[2] = document.getElementById("subjectLine").innerHTML = result.value;
     });
     //========================================================================================
 
@@ -190,18 +203,20 @@ function getInfo() {
         return;
       }
       console.log(`Appointment organizer: ${result.value}`);
-      values[5] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+      values[3] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
     });
     //========================================================================================
   } else {
 
     //Sætter felterne til at være de samme som mødet, hvis det er et møde man er inviteret til.
-    values[0] = document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    values[1] = document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
-    values[2] = document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    values[3] = document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
-    values[4] = document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
-    values[5] = document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
+    document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    values[0] = Office.context.mailbox.item.start;
+    values[1] = Office.context.mailbox.item.end;
+    values[2] = document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
+    values[3] = document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
 
   }
 
