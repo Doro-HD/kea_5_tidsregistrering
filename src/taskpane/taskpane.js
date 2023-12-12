@@ -18,23 +18,30 @@ Office.onReady((info) => {
   }
 });
 
+//Made by Victor and Troels.
+async function getEventFromBackend() {
 
-async function getEventFromBackend(){
+  let eventIdString;
+  if (Office.context.mailbox.item.itemId == undefined) {
+    eventIdString = await getEventId();
+  } else {
+    eventIdString = Office.context.mailbox.item.itemId;
+  }
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  const jsonBody = JSON.stringify({
-    Id: eventIdString, //Aktivitets ID
+  //============================DISSE SKAL LIGE TJEKKES IGENNEM===================================
+  const encodedEventId = encodeURIComponent(eventIdString);
+  const encodedProjectId = Office.context.mailbox.convertToRestId(eventIdString, Office.MailboxEnums.RestVersion.v2_0);
+  //=============================VI KAN MULIGVIS BRUGE CONVERTTORESTID SOM "ENCODER"==============
 
-  })
-
+  console.log(encodedProjectId);
   try {
-    const data = await fetch(baseURL + "/appointment", {
-      method: 'get',
-      headers: headers,
-      body: jsonBody
+    const data = await fetch(baseURL + "/appointment/" + encodedEventId, {
+/*       method: 'get',
+      headers: headers */
     })
 
     if (!data.ok) {
@@ -44,11 +51,14 @@ async function getEventFromBackend(){
     //Unpack json object here
     document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
 
+    console.log(data.json());
+
   } catch (error) {
     console.error(error)
     errorHandler(error);
   }
 
+  
 }
 
 
