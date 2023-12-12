@@ -20,6 +20,14 @@ Office.onReady((info) => {
 
 //Made by Victor, Troels and David.
 async function getCalendarEventIdAfterSave() {
+
+  const values = getInfo();
+
+  //===============================VICTOR KIG HER===================================================
+  const projectid = document.querySelector("input#project-id").value;
+  values[6] = projectid;
+  //================================================================================================
+
   let eventIdString;
   if (Office.context.mailbox.item.itemId == undefined) {
     eventIdString = await getEventId();
@@ -33,8 +41,16 @@ async function getCalendarEventIdAfterSave() {
   headers.append("Accept", "application/json")
 
   const jsonBody = JSON.stringify({
-    id: eventIdString,
-    name: "TestStringBody"
+    id: eventIdString, //Aktivitets ID
+    //Felterne skal ændres til hvad de hedder i databasen.
+    name: values[4], //Subjectline/Navn på møde
+    startTime: values[0], //Start tidspunkt
+    endTime: values[2], //Slut tidspunkt
+    startDate: values[1], //Start dato
+    endDate: values[3], //Slut dato
+    email: values[5], //Email på bruger
+    projectId: values[6] //Projekt ID
+    
   })
 
   try {
@@ -96,9 +112,7 @@ export async function run() { //Run fucntion to send the project ID to the backe
 
     // Select all elements with the given class name and set their innerHTML
     console.log(error)
-
-    //Troels made this switch case.
-    //This switch case can be expanded to handle more errors.
+    
     errorHandler(error);
   }
 }
@@ -106,6 +120,7 @@ export async function run() { //Run fucntion to send the project ID to the backe
 //Made by Troels.
 //En lille metode, der tager en fejl, og viser en besked til brugeren.
 //Smed den over i sin egen metode, så den kan genbruges. frem for at skrive den samme kode flere gange.
+//This switch case can be expanded to handle more errors.
 function errorHandler(error) {
   switch (error.message.replace(/\D/g, '')) {
     case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
@@ -121,6 +136,8 @@ function errorHandler(error) {
 //Made by Troels.
 async function getInfo() {
 
+  const values = [];
+
   if (Office.context.mailbox.item.itemId == undefined) {
 
     //Henter start og slut tidspunk på mødet
@@ -132,8 +149,8 @@ async function getInfo() {
       }
 
       console.log(`Appointment starts: ${result.value}`);
-      document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+      values[0] = document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      values[1] = document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
     });
 
     Office.context.mailbox.item.end.getAsync((result) => {
@@ -143,8 +160,8 @@ async function getInfo() {
       }
 
       console.log(`Appointment ends: ${result.value}`);
-      document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+      values[2] = document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
+      values[3] = document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
     });
     //========================================================================================
 
@@ -157,7 +174,7 @@ async function getInfo() {
         return;
       }
       console.log(`Appointment subject: ${result.value}`);
-      document.getElementById("subjectLine").innerHTML = result.value;
+      values[4] = document.getElementById("subjectLine").innerHTML = result.value;
     });
     //========================================================================================
 
@@ -169,19 +186,21 @@ async function getInfo() {
         return;
       }
       console.log(`Appointment organizer: ${result.value}`);
-      document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+      values[5] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
     });
     //========================================================================================
   } else {
 
     //Sætter felterne til at være de samme som mødet, hvis det er et møde man er inviteret til.
-    document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
-    document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
-    document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
-    document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
+    values[0] = document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    values[1] = document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    values[2] = document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    values[3] = document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    values[4] = document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
+    values[5] = document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
 
   }
 
+  console.log(values);
+  return values;
 } 
