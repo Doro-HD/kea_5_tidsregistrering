@@ -13,13 +13,12 @@ Office.onReady((info) => {
     getInfo();
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
-    document.getElementById("the-event-id").onclick = getCalendarEventIdAfterSave;
+    document.getElementById("the-event-id").onclick = sendJsonDataToBackend;
   }
 });
 
 //Made by Victor, Troels and David.
-async function getCalendarEventIdAfterSave() {
+async function sendJsonDataToBackend() {
 
   const values = getInfo();
 
@@ -92,6 +91,8 @@ async function getCalendarEventIdAfterSave() {
   console.log(eventIdString)
 }
 
+
+
 //Made by Victor, Troels and David.
 function getEventId() {
   return new Promise((resolve, reject) => {
@@ -101,36 +102,6 @@ function getEventId() {
   })
 }
 
-
-//14:54. 22/11/2023. A large portion of this function has been taken from Chatgbt.
-//Victor has edited large sections of this function so it fits our needs.
-export async function run() { //Run fucntion to send the project ID to the backend. And show a respond feedback to user.
-  const projectId = document.querySelector("input#project-id").value;
-
-  try {
-
-    const response = await fetch(baseURL + '/test/' + projectId, {
-
-    });
-
-    //Tilføj de populated felter (startDate, endDate, startTime, endTime)
-    //til et fetch kald, så de kan sendes med til backenden, sammen med projekt ID'et.
-
-    if (!response.ok) { // If response status code is an error (4xx or 5xx)
-
-      throw new Error(`HTTP Error! Status: ${response.status}`);
-    }
-
-    document.getElementById("returned-message-backend").innerHTML = "Success!!!!!!!!!!!!!";
-    return response.json(); // or .text() if the response is not JSON
-  } catch (error) {
-
-    // Select all elements with the given class name and set their innerHTML
-    console.log(error)
-    
-    errorHandler(error);
-  }
-}
 
 //Made by Troels.
 //En lille metode, der tager en fejl, og viser en besked til brugeren.
