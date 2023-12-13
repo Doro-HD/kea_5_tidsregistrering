@@ -4,7 +4,7 @@
  */
 /* global document, Office */
 
-
+let eventIsPresent;
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -14,8 +14,64 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("the-event-id").onclick = sendJsonDataToBackend;
+    getEventFromBackend();
   }
 });
+
+//Made by Victor and Troels.
+async function getEventFromBackend() {
+
+  let eventIdString;
+  if (Office.context.mailbox.item.itemId == undefined) {
+    eventIdString = await getEventId();
+  } else {
+    eventIdString = Office.context.mailbox.item.itemId;
+  }
+
+  let headers = new Headers()
+  headers.append("Content-Type", "application/json; charset=utf-8")
+  headers.append("Accept", "application/json")
+
+  const encodedIdString = encodeURIComponent(eventIdString);
+
+  try {
+    const response = await fetch(baseURL + "/appointment/query?id=" + encodedIdString, {})
+
+    if (!response.ok) {
+      throw new Error()
+    }
+
+
+    const data = await response.json()
+
+
+    if (data != null) {
+      if(data.projectId.trim() != ""){
+        eventIsPresent = true;
+        document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
+        document.getElementById("project-id").value = data.projectId;
+      } else {
+        eventIsPresent = true;
+        document.getElementById("intet-grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID.";
+      }
+    } else {
+      eventIsPresent = false;
+      console.log("No event found");
+      document.getElementById("returned-message-backend").innerHTML = "No event found";
+    }
+
+
+    //console.log(data.projectId);
+
+  } catch (error) {
+    console.error("Ingen event fundet i databasen som allerede eksisterer.")
+    eventIsPresent = false;
+  }
+
+
+}
+
+
 
 //Made by Victor, Troels and David.
 async function sendJsonDataToBackend() {
@@ -25,8 +81,6 @@ async function sendJsonDataToBackend() {
   const projectid = document.querySelector("input#project-id").value;
   values[4] = projectid;
 
-
-  console.log(values);
 
   let eventIdString;
   if (Office.context.mailbox.item.itemId == undefined) {
@@ -54,7 +108,7 @@ async function sendJsonDataToBackend() {
 
   })
 
-  console.log(jsonBody)
+  //console.log(jsonBody)
 
   try {
     const data = await fetch(baseURL + "/appointment", {
@@ -77,7 +131,7 @@ async function sendJsonDataToBackend() {
     errorHandler(error);
   }
 
-  console.log(eventIdString)
+  //console.log(eventIdString)
 }
 
 
@@ -102,7 +156,7 @@ function errorHandler(error) {
       break;
     case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
       break;
-    default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
+    default: document.getElementById("returned-message-backend").innerHTML = "Generel fejl. IK prøv igen";
       break;
   }
 }
@@ -124,7 +178,7 @@ function getInfo() {
       }
 
       values[0] = result.value;
-      console.log(`Appointment starts: ${result.value}`);
+      //console.log(`Appointment starts: ${result.value}`);
       /* values[0] =  */document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
       /* values[1] =  */document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
     });
@@ -136,7 +190,7 @@ function getInfo() {
       }
 
       values[1] = result.value;
-      console.log(`Appointment ends: ${result.value}`);
+      //console.log(`Appointment ends: ${result.value}`);
       /* values[2] =  */document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
       /* values[3] =  */document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
     });
@@ -150,7 +204,7 @@ function getInfo() {
         console.error(`Action failed with message ${result.error.message}`);
         return;
       }
-      console.log(`Appointment subject: ${result.value}`);
+      //console.log(`Appointment subject: ${result.value}`);
       values[2] = document.getElementById("subjectLine").innerHTML = result.value;
     });
     //========================================================================================
@@ -162,7 +216,7 @@ function getInfo() {
         console.error(`Action failed with message ${result.error.message}`);
         return;
       }
-      console.log(`Appointment organizer: ${result.value}`);
+      //console.log(`Appointment organizer: ${result.value}`);
       values[3] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
     });
     //========================================================================================
@@ -180,6 +234,6 @@ function getInfo() {
 
   }
 
-  console.log(values);
+  //console.log(values);
   return values;
 } 
