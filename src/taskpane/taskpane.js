@@ -38,12 +38,12 @@ async function getEventFromBackend() {
     const response = await fetch(baseURL + "/appointment/query?id=" + encodedIdString, {})
 
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`)
+      throw new Error()
     }
 
 
     const data = await response.json()
-
+/*
     if (data === null) {
       console.log("No event found");
       document.getElementById("returned-message-backend").innerHTML = "No event found";
@@ -57,6 +57,28 @@ async function getEventFromBackend() {
         document.getElementById("grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID";
       }
     }
+*/
+
+
+    if (data != null) {
+      console.log("megaburger:" + data.projectId)
+      if(data.projectId === 0){
+        document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
+        document.getElementById("project-id").value = data.projectId;
+      } else {
+        document.getElementById("grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID";
+      }
+    } else {
+      console.log("No event found");
+      document.getElementById("returned-message-backend").innerHTML = "No event found";
+      
+    }
+
+
+
+
+
+
 
     //Unpack json object here
     /* document.getElementById("returned-message-backend").innerHTML = data.projectId; */
@@ -65,8 +87,7 @@ async function getEventFromBackend() {
     console.log(data.projectId);
 
   } catch (error) {
-    console.error(error)
-    errorHandler(error);
+    console.error("Ingen event fundet i databasen som allerede eksisterer.")
   }
 
 
@@ -159,7 +180,7 @@ function errorHandler(error) {
       break;
     case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
       break;
-    default: document.getElementById("returned-message-backend").innerHTML = "Genneral fejl. IK prøv igen";
+    default: document.getElementById("returned-message-backend").innerHTML = "Generel fejl. IK prøv igen";
       break;
   }
 }
