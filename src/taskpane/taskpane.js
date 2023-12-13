@@ -46,12 +46,11 @@ async function getEventFromBackend() {
 
 
     if (data != null) {
+      isEventPresent = true;
       if (data.projectId.trim() != "") {
-        isEventPresent = true;
         document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
         document.getElementById("project-id").value = data.projectId;
       } else {
-        isEventPresent = true;
         document.getElementById("intet-grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID.";
       }
     } else {
