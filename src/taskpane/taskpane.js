@@ -4,7 +4,7 @@
  */
 /* global document, Office */
 
-let ifEventIsPresent;
+let eventIsPresent;
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -43,51 +43,29 @@ async function getEventFromBackend() {
 
 
     const data = await response.json()
-/*
-    if (data === null) {
-      console.log("No event found");
-      document.getElementById("returned-message-backend").innerHTML = "No event found";
-    } else {
-      console.log("Event found");
-      document.getElementById("returned-message-backend").innerHTML = "Event found";
-      if(data.projectId.lenght != 0){
-        document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
-        document.getElementById("project-id").value = data.projectId;
-      } else {
-        document.getElementById("grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID";
-      }
-    }
-*/
 
 
     if (data != null) {
-      console.log("megaburger:" + data.projectId)
-      if(data.projectId === 0){
+      if(data.projectId.trim() != ""){
+        eventIsPresent = true;
         document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
         document.getElementById("project-id").value = data.projectId;
       } else {
-        document.getElementById("grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID";
+        eventIsPresent = true;
+        document.getElementById("intet-grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID.";
       }
     } else {
+      eventIsPresent = false;
       console.log("No event found");
       document.getElementById("returned-message-backend").innerHTML = "No event found";
-      
     }
 
 
-
-
-
-
-
-    //Unpack json object here
-    /* document.getElementById("returned-message-backend").innerHTML = data.projectId; */
-    /* document.getElementById("event-id").ariaPlaceholder = data.projectid; */
-
-    console.log(data.projectId);
+    //console.log(data.projectId);
 
   } catch (error) {
     console.error("Ingen event fundet i databasen som allerede eksisterer.")
+    eventIsPresent = false;
   }
 
 
@@ -103,8 +81,6 @@ async function sendJsonDataToBackend() {
   const projectid = document.querySelector("input#project-id").value;
   values[4] = projectid;
 
-
-  console.log(values);
 
   let eventIdString;
   if (Office.context.mailbox.item.itemId == undefined) {
@@ -132,7 +108,7 @@ async function sendJsonDataToBackend() {
 
   })
 
-  console.log(jsonBody)
+  //console.log(jsonBody)
 
   try {
     const data = await fetch(baseURL + "/appointment", {
@@ -155,7 +131,7 @@ async function sendJsonDataToBackend() {
     errorHandler(error);
   }
 
-  console.log(eventIdString)
+  //console.log(eventIdString)
 }
 
 
@@ -202,7 +178,7 @@ function getInfo() {
       }
 
       values[0] = result.value;
-      console.log(`Appointment starts: ${result.value}`);
+      //console.log(`Appointment starts: ${result.value}`);
       /* values[0] =  */document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
       /* values[1] =  */document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
     });
@@ -214,7 +190,7 @@ function getInfo() {
       }
 
       values[1] = result.value;
-      console.log(`Appointment ends: ${result.value}`);
+      //console.log(`Appointment ends: ${result.value}`);
       /* values[2] =  */document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
       /* values[3] =  */document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
     });
@@ -228,7 +204,7 @@ function getInfo() {
         console.error(`Action failed with message ${result.error.message}`);
         return;
       }
-      console.log(`Appointment subject: ${result.value}`);
+      //console.log(`Appointment subject: ${result.value}`);
       values[2] = document.getElementById("subjectLine").innerHTML = result.value;
     });
     //========================================================================================
@@ -240,7 +216,7 @@ function getInfo() {
         console.error(`Action failed with message ${result.error.message}`);
         return;
       }
-      console.log(`Appointment organizer: ${result.value}`);
+      //console.log(`Appointment organizer: ${result.value}`);
       values[3] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
     });
     //========================================================================================
@@ -258,6 +234,6 @@ function getInfo() {
 
   }
 
-  console.log(values);
+  //console.log(values);
   return values;
 } 
