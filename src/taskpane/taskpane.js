@@ -4,7 +4,7 @@
  */
 /* global document, Office */
 
-let eventIsPresent;
+let isEventPresent;
 const baseURL = "https://timereg-api.azurewebsites.net"
 
 
@@ -46,16 +46,16 @@ async function getEventFromBackend() {
 
 
     if (data != null) {
-      if(data.projectId.trim() != ""){
-        eventIsPresent = true;
+      if (data.projectId.trim() != "") {
+        isEventPresent = true;
         document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
         document.getElementById("project-id").value = data.projectId;
       } else {
-        eventIsPresent = true;
+        isEventPresent = true;
         document.getElementById("intet-grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID.";
       }
     } else {
-      eventIsPresent = false;
+      isEventPresent = false;
       console.log("No event found");
       document.getElementById("returned-message-backend").innerHTML = "No event found";
     }
@@ -65,7 +65,7 @@ async function getEventFromBackend() {
 
   } catch (error) {
     console.error("Ingen event fundet i databasen som allerede eksisterer.")
-    eventIsPresent = false;
+    isEventPresent = false;
   }
 
 
@@ -75,7 +75,7 @@ async function getEventFromBackend() {
 
 //Made by Victor, Troels and David.
 async function sendJsonDataToBackend() {
-
+  console.log(isEventPresent)
   const values = getInfo();
 
   const projectid = document.querySelector("input#project-id").value;
@@ -90,14 +90,8 @@ async function sendJsonDataToBackend() {
   }
 
 
-  let headers = new Headers()
-  headers.append("Content-Type", "application/json; charset=utf-8")
-  headers.append("Accept", "application/json")
 
-
-
-
-  const jsonBody = JSON.stringify({ 
+  const jsonBody = JSON.stringify({
     Id: eventIdString, //Aktivitets ID
     //Felterne skal ændres til hvad de hedder i databasen.
     Subject: values[2], //Subjectline/Navn på møde
@@ -108,28 +102,68 @@ async function sendJsonDataToBackend() {
 
   })
 
-  //console.log(jsonBody)
 
-  try {
-    const data = await fetch(baseURL + "/appointment", {
-      method: 'post',
-      headers: headers,
-      body: jsonBody
-    })
 
-    if (!data.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`)
+  let headers = new Headers()
+  headers.append("Content-Type", "application/json; charset=utf-8")
+  headers.append("Accept", "application/json")
+
+
+  if (isEventPresent == false) {
+
+    try {
+      const data = await fetch(baseURL + "/appointment", {
+        method: 'post',
+        headers: headers,
+        body: jsonBody
+      })
+
+      if (!data.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`)
+      }
+
+      document.getElementById("returned-message-backend").innerHTML = "Successful registreret!";
+      console.log("Registreret!")
+
+    } catch (error) {
+
+      console.error(error)
+
+      errorHandler(error);
     }
 
-    document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
-    console.log("Registreret")
+  } else {
 
-  } catch (error) {
+    try {
+      const data = await fetch(baseURL + "/appointment", {
+        method: 'put',
+        headers: headers,
+        body: jsonBody
+      })
 
-    console.error(error)
+      if (!data.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`)
+      }
 
-    errorHandler(error);
+      document.getElementById("returned-message-backend").innerHTML = "Successful opdateret!";
+      console.log("Opdateret!")
+
+    } catch (error) {
+
+      console.error(error)
+
+      errorHandler(error);
+    }
+
+
   }
+
+  //console.log(jsonBody)
+
+
+
+
+
 
   //console.log(eventIdString)
 }
