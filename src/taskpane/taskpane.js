@@ -32,33 +32,44 @@ async function getEventFromBackend() {
   headers.append("Content-Type", "application/json; charset=utf-8")
   headers.append("Accept", "application/json")
 
-  //============================DISSE SKAL LIGE TJEKKES IGENNEM===================================
-  const encodedEventId = encodeURIComponent(eventIdString);
-  const encodedProjectId = Office.context.mailbox.convertToRestId(eventIdString, Office.MailboxEnums.RestVersion.v2_0);
-  //=============================VI KAN MULIGVIS BRUGE CONVERTTORESTID SOM "ENCODER"==============
+  const encodedIdString = encodeURIComponent(eventIdString);
 
-  console.log(encodedProjectId);
   try {
-    const data = await fetch(baseURL + "/appointment/" + encodedEventId, {
-/*       method: 'get',
-      headers: headers */
-    })
+    const response = await fetch(baseURL + "/appointment/query?id=" + encodedIdString, {})
 
-    if (!data.ok) {
+    if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`)
     }
 
-    //Unpack json object here
-    document.getElementById("returned-message-backend").innerHTML = "Successful registreret";
 
-    console.log(data.json());
+    const data = await response.json()
+
+    if (data === null) {
+      console.log("No event found");
+      document.getElementById("returned-message-backend").innerHTML = "No event found";
+    } else {
+      console.log("Event found");
+      document.getElementById("returned-message-backend").innerHTML = "Event found";
+      if(data.projectId.lenght != 0){
+        document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
+        document.getElementById("project-id").value = data.projectId;
+      } else {
+        document.getElementById("grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID";
+      }
+    }
+
+    //Unpack json object here
+    /* document.getElementById("returned-message-backend").innerHTML = data.projectId; */
+    /* document.getElementById("event-id").ariaPlaceholder = data.projectid; */
+
+    console.log(data.projectId);
 
   } catch (error) {
     console.error(error)
     errorHandler(error);
   }
 
-  
+
 }
 
 
