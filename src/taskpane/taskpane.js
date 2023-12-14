@@ -120,6 +120,7 @@ async function sendJsonDataToBackend() {
       const node = document.getElementById("returned-message-backend");
       node.style.color = "green";
       node.textContent = "Successful registreret!";
+      isEventPresent = true; //Efter første gang vi har lave post request sætter vi bool til true, da vi derefter ikke behøverl ukke vinduet hvis vi vil put et request.
       console.log("Registreret!")
 
     } catch (error) {
