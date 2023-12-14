@@ -48,15 +48,15 @@ async function getEventFromBackend() {
     if (data != null) {
       isEventPresent = true;
       if (data.projectId.trim() != "") {
-        document.getElementById("grabbed-data").innerHTML = "Tidlligere bogført projekt ID: " + data.projectId;
+        document.getElementById("grabbed-data").textContent = "Tidlligere bogført projekt ID: " + data.projectId;
         document.getElementById("project-id").value = data.projectId;
       } else {
-        document.getElementById("intet-grabbed-data").innerHTML = "Ingen tidlligere bogført projekt ID.";
+        document.getElementById("intet-grabbed-data").textContent = "Ingen tidlligere bogført projekt ID.";
       }
     } else {
       isEventPresent = false;
       console.log("No event found");
-      document.getElementById("returned-message-backend").innerHTML = "No event found";
+      document.getElementById("returned-message-backend").textContent = "No event found";
     }
 
 
@@ -88,8 +88,6 @@ async function sendJsonDataToBackend() {
     eventIdString = Office.context.mailbox.item.itemId;
   }
 
-
-
   const jsonBody = JSON.stringify({
     Id: eventIdString, //Aktivitets ID
     //Felterne skal ændres til hvad de hedder i databasen.
@@ -100,8 +98,6 @@ async function sendJsonDataToBackend() {
     AppointmentEnd: values[1], //Møde slut
 
   })
-
-
 
   let headers = new Headers()
   headers.append("Content-Type", "application/json; charset=utf-8")
@@ -118,10 +114,12 @@ async function sendJsonDataToBackend() {
       })
 
       if (!data.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`)
+        throw new Error(`HTTP Error! Status: ${data.status}`)
       }
 
-      document.getElementById("returned-message-backend").innerHTML = "Successful registreret!";
+      const node = document.getElementById("returned-message-backend");
+      node.style.color = "green";
+      node.textContent = "Successful registreret!";
       console.log("Registreret!")
 
     } catch (error) {
@@ -141,10 +139,12 @@ async function sendJsonDataToBackend() {
       })
 
       if (!data.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`)
+        throw new Error(`HTTP Error! Status: ${data.status}`)
       }
 
-      document.getElementById("returned-message-backend").innerHTML = "Successful opdateret!";
+      const node = document.getElementById("returned-message-backend");
+      node.style.color = "green";
+      node.textContent = "Successful opdateret!";
       console.log("Opdateret!")
 
     } catch (error) {
@@ -153,17 +153,8 @@ async function sendJsonDataToBackend() {
 
       errorHandler(error);
     }
-
-
   }
-
   //console.log(jsonBody)
-
-
-
-
-
-
   //console.log(eventIdString)
 }
 
@@ -179,17 +170,20 @@ function getEventId() {
 }
 
 
-//Made by Troels.
+//Made by Troels, Victor and supervised by David
 //En lille metode, der tager en fejl, og viser en besked til brugeren.
 //Smed den over i sin egen metode, så den kan genbruges. frem for at skrive den samme kode flere gange.
 //This switch case can be expanded to handle more errors.
 function errorHandler(error) {
+  console.log(error.message.replace(/\D/g, ''));
+  const node = document.getElementById("returned-message-backend");
+  node.style.color = "red";
   switch (error.message.replace(/\D/g, '')) {
-    case "400": document.getElementById("returned-message-backend").innerHTML = "Fejl i projekt ID. Prøv igen";
+    case "400": node.textContent = "Fejl. Gem aktivitet og prøv igen.";
       break;
-    case "404": document.getElementById("returned-message-backend").innerHTML = "Intern server fejl. Prøv igen";
+    case "404": node.textContent = "Intern server fejl. Prøv igen.";
       break;
-    default: document.getElementById("returned-message-backend").innerHTML = "Generel fejl. IK prøv igen";
+    default: node.textContent = "Generel fejl. Prøv igen.";
       break;
   }
 }
@@ -212,8 +206,8 @@ function getInfo() {
 
       values[0] = result.value;
       //console.log(`Appointment starts: ${result.value}`);
-      /* values[0] =  */document.getElementById("startTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      /* values[1] =  */document.getElementById("startDate").innerHTML = result.value.toLocaleDateString();
+      document.getElementById("startDate").textContent = result.value.toLocaleDateString();
+      document.getElementById("startTime").textContent = result.value.toTimeString().split(' ')[0];
     });
 
     Office.context.mailbox.item.end.getAsync((result) => {
@@ -224,8 +218,8 @@ function getInfo() {
 
       values[1] = result.value;
       //console.log(`Appointment ends: ${result.value}`);
-      /* values[2] =  */document.getElementById("endTime").innerHTML = result.value.toTimeString().split(' ')[0];
-      /* values[3] =  */document.getElementById("endDate").innerHTML = result.value.toLocaleDateString();
+      document.getElementById("endTime").textContent = result.value.toTimeString().split(' ')[0];
+      document.getElementById("endDate").textContent = result.value.toLocaleDateString();
     });
     //========================================================================================
 
@@ -238,7 +232,7 @@ function getInfo() {
         return;
       }
       //console.log(`Appointment subject: ${result.value}`);
-      values[2] = document.getElementById("subjectLine").innerHTML = result.value;
+      values[2] = document.getElementById("subjectLine").textContent = result.value;
     });
     //========================================================================================
 
@@ -250,20 +244,20 @@ function getInfo() {
         return;
       }
       //console.log(`Appointment organizer: ${result.value}`);
-      values[3] = document.getElementById("emailAddress").innerHTML = result.value.emailAddress;
+      values[3] = document.getElementById("emailAddress").textContent = result.value.emailAddress;
     });
     //========================================================================================
   } else {
 
     //Sætter felterne til at være de samme som mødet, hvis det er et møde man er inviteret til.
-    document.getElementById("startTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    document.getElementById("startDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
-    document.getElementById("endTime").innerHTML = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
-    document.getElementById("endDate").innerHTML = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("startTime").textContent = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("startDate").textContent = Office.context.mailbox.item.end.toLocaleDateString();
+    document.getElementById("endTime").textContent = Office.context.mailbox.item.end.toTimeString().split(' ')[0];
+    document.getElementById("endDate").textContent = Office.context.mailbox.item.end.toLocaleDateString();
     values[0] = Office.context.mailbox.item.start;
     values[1] = Office.context.mailbox.item.end;
-    values[2] = document.getElementById("subjectLine").innerHTML = Office.context.mailbox.item.subject;
-    values[3] = document.getElementById("emailAddress").innerHTML = Office.context.mailbox.userProfile.emailAddress;
+    values[2] = document.getElementById("subjectLine").textContent = Office.context.mailbox.item.subject;
+    values[3] = document.getElementById("emailAddress").textContent = Office.context.mailbox.userProfile.emailAddress;
 
   }
 
